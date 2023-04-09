@@ -6,8 +6,8 @@ async function chargerProjets() {
         const reponse = await fetch('http://localhost:5678/api/works');
         const projets = await reponse.json();
         const valeurProjets = JSON.stringify(projets);
-	    // Stockage des informations dans le localStorage
-	    window.localStorage.setItem("projets", valeurProjets);
+        // Stockage des informations dans le localStorage
+        window.localStorage.setItem("projets", valeurProjets);
         // Appeler la fonction pour générer les projets avec les données récupérées
         genererProjets(projets);
     } catch (error) {
@@ -33,7 +33,7 @@ function genererProjets(projets) {
         // On rattache la balise article a la section Projets
         projetElement.appendChild(imageElement);
         projetElement.appendChild(titleElement);
-        sectionProjets.appendChild(projetElement); 
+        sectionProjets.appendChild(projetElement);
     }
 }
 
@@ -43,41 +43,41 @@ chargerProjets()
 const boutonAll = document.querySelector(".btn-all");
 
 boutonAll.addEventListener("click", function () {
-	document.querySelector(".gallery").innerHTML = "";
-	genererProjets(projets);
+    document.querySelector(".gallery").innerHTML = "";
+    genererProjets(projets);
 });
 
 // Filtre pour catégorie objet
 const boutonObjets = document.querySelector(".btn-objets");
 
 boutonObjets.addEventListener("click", function () {
-	const projetsFiltres = projets.filter(function (projets) {
-		return projets.categoryId === 1;
-	});
-	document.querySelector(".gallery").innerHTML = "";
-	genererProjets(projetsFiltres);
+    const projetsFiltres = projets.filter(function (projets) {
+        return projets.categoryId === 1;
+    });
+    document.querySelector(".gallery").innerHTML = "";
+    genererProjets(projetsFiltres);
 });
 
 // Filtre pour catégorie appartements
 const boutonAppartements = document.querySelector(".btn-appartements");
 
 boutonAppartements.addEventListener("click", function () {
-	const projetsFiltres = projets.filter(function (projets) {
-		return projets.categoryId === 2;
-	});
-	document.querySelector(".gallery").innerHTML = "";
-	genererProjets(projetsFiltres);
+    const projetsFiltres = projets.filter(function (projets) {
+        return projets.categoryId === 2;
+    });
+    document.querySelector(".gallery").innerHTML = "";
+    genererProjets(projetsFiltres);
 });
 
 // Filtre pour catégorie Hotels & restaurants
 const boutonHotelsRestaurants = document.querySelector(".btn-hotel-restau");
 
 boutonHotelsRestaurants.addEventListener("click", function () {
-	const projetsFiltres = projets.filter(function (projets) {
-		return projets.categoryId === 3;
-	});
-	document.querySelector(".gallery").innerHTML = "";
-	genererProjets(projetsFiltres);
+    const projetsFiltres = projets.filter(function (projets) {
+        return projets.categoryId === 3;
+    });
+    document.querySelector(".gallery").innerHTML = "";
+    genererProjets(projetsFiltres);
 });
 
 // Permet d'afficher le bouton du filtre sélectionné en "actif" en changeant sa couleur etc

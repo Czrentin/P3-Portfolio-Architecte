@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server",
+    "sass": "sass --watch ./FrontEnd/main.scss:./FrontEnd/assets/style.css --style compressed",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
