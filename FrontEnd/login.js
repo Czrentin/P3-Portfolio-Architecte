@@ -28,7 +28,3 @@ formulaireLogin.addEventListener("submit", async function (event) {
             alert('Identifiants incorrects');
         });
 });
-
-
-formulaireLogin.addEventListener("submit", logSubmit);
-
