@@ -1,10 +1,7 @@
 @import "./scss/base";
-
-$green-color: #1d6154;
-$orange-color: #b1663c;
-$black-color: #000;
-$white-color: #fff;
-$bg-color: #fffef8;
+@import "./scss/utils";
+@import "./scss/pages/index";
+@import "./scss/pages/login";
 
 * {
   font: inherit;
@@ -69,94 +66,6 @@ h2 {
   color: $green-color;
 }
 
-#introduction {
-  display: flex;
-  align-items: center;
-  figure,
-  article {
-    flex: 1;
-  }
-  img {
-    display: block;
-    margin: auto;
-    width: 80%;
-  }
-  h2 {
-    margin-bottom: 1em;
-  }
-  p {
-    margin-bottom: 0.5em;
-  }
-}
-
-#portfolio h2 {
-  text-align: center;
-  margin-bottom: 1em;
-}
-
-.filtre {
-  display: flex;
-  ul {
-    margin: 20px auto 50px auto;
-  }
-}
-
-button {
-  font-family: "Syne";
-  font-size: 16px;
-  color: $green-color;
-  padding: 10px 20px;
-  background-color: transparent;
-  border: 1px solid $green-color;
-  border-radius: 60px;
-}
-
-.active {
-  color: $white-color;
-  background-color: $green-color;
-}
-
-.gallery {
-  width: 100%;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-column-gap: 20px;
-  grid-row-gap: 20px;
-  img {
-    width: 100%;
-  }
-}
-
-#contact > * {
-  text-align: center;
-}
-
-#contact {
-  width: 50%;
-  margin: auto;
-  h2 {
-    margin-bottom: 20px;
-  }
-  form {
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-  }
-  input {
-    height: 50px;
-    font-size: 1.2em;
-    border: none;
-    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
-  }
-  label {
-    margin: 2em 0 1em 0;
-  }
-  textarea {
-    border: none;
-    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
-  }
-}
-
 input[type="submit"] {
   font-family: "Syne";
   font-weight: 700;
@@ -177,39 +86,4 @@ footer nav ul {
   display: flex;
   justify-content: flex-end;
   padding: 2em;
-}
-
-#login {
-  display: flex;
-  flex-direction: column;
-  margin: 50px auto;
-  width: 380px;
-  h2 {
-    margin-inline: auto;
-    font-family: "Syne";
-    font-weight: 700;
-    font-size: 30px;
-    color: $green-color;
-    margin-bottom: 25px;
-  }
-  a {
-    text-align: center;
-    color: $black-color;
-  }
-}
-
-.form {
-  display: flex;
-  flex-direction: column;
-  label {
-    font-family: "Work Sans";
-    margin-bottom: 7px;
-  }
-  input {
-    border: none;
-    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
-    margin-bottom: 30px;
-    height: 50px;
-    font-size: 1.2em;
-  }
 }
