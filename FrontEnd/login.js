@@ -1,5 +1,4 @@
-const formulaireLogin = document.querySelector("form");
-
+const formulaireLogin = document.querySelector("form")
 formulaireLogin.addEventListener("submit", async function (event) {
     event.preventDefault();
     // Création de l’objet avec le mail et password
@@ -8,23 +7,27 @@ formulaireLogin.addEventListener("submit", async function (event) {
         password: event.target.querySelector("[name=password]").value
     };
     // Appel de la fonction fetch avec toutes les informations nécessaires
-    await fetch("http://localhost:5678/api/users/login", {
-        method: "POST",
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(user)
-    })
-        .then(response => {
-            if (response.ok) {
-                // La requête a réussi, redirection vers la page d'accueil
-                window.location.href = 'index.html';
-            } else {
-                // La requête a échoué, affichage d'un message d'erreur
-                throw new Error('Identifiants incorrects');
-            }
+    try {
+        const response = await fetch("http://localhost:5678/api/users/login", {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(user)
         })
-        .catch(error => {
-            console.error(error);
-            // Affichage d'un message d'erreur
-            alert('Identifiants incorrects');
-        });
-});
+        if (response.ok) {
+            // La requête a réussi, redirection vers la page d'accueil
+            window.location.href = 'index.html'
+            const responseJSON = await response.json()
+            const token = responseJSON.token;
+            const valeurToken = JSON.stringify(token);
+            // Stockage des informations dans le localStorage
+            window.sessionStorage.setItem("token", valeurToken);
+        } else {
+            // La requête a échoué, affichage d'un message d'erreur
+            throw new Error('Identifiants incorrects')
+        }
+    } catch (error) {
+        console.error(error)
+        // Affichage d'un message d'erreur
+        alert('Identifiants incorrects')
+    }
+})
