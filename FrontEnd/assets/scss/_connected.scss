@@ -1,0 +1,21 @@
+.barre-modifier {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $black-color;
+  color: $white-color;
+  padding: 10px;
+  gap: 20px;
+  p {
+    font-family: "Work Sans";
+  }
+  button {
+    font-family: "Work Sans";
+    font-size: 14px;
+    font-weight: 500;
+    color: $black-color;
+    background-color: $white-color;
+    border: none;
+  }
+}

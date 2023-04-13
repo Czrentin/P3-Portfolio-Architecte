@@ -39,12 +39,16 @@ function genererProjets(projets) {
 
 chargerProjets()
 
+function galleryReset() {
+    document.querySelector(".gallery").innerHTML = ""
+}
+
 // Filtre pour catégorie objet
 const boutonAll = document.querySelector(".btn-all");
 
 boutonAll.addEventListener("click", function () {
-    document.querySelector(".gallery").innerHTML = "";
-    genererProjets(projets);
+    galleryReset()
+    genererProjets(projets)
 });
 
 // Filtre pour catégorie objet
@@ -54,8 +58,8 @@ boutonObjets.addEventListener("click", function () {
     const projetsFiltres = projets.filter(function (projets) {
         return projets.categoryId === 1;
     });
-    document.querySelector(".gallery").innerHTML = "";
-    genererProjets(projetsFiltres);
+    galleryReset()
+    genererProjets(projetsFiltres)
 });
 
 // Filtre pour catégorie appartements
@@ -65,8 +69,8 @@ boutonAppartements.addEventListener("click", function () {
     const projetsFiltres = projets.filter(function (projets) {
         return projets.categoryId === 2;
     });
-    document.querySelector(".gallery").innerHTML = "";
-    genererProjets(projetsFiltres);
+    galleryReset()
+    genererProjets(projetsFiltres)
 });
 
 // Filtre pour catégorie Hotels & restaurants
@@ -76,22 +80,81 @@ boutonHotelsRestaurants.addEventListener("click", function () {
     const projetsFiltres = projets.filter(function (projets) {
         return projets.categoryId === 3;
     });
-    document.querySelector(".gallery").innerHTML = "";
-    genererProjets(projetsFiltres);
+    galleryReset()
+    genererProjets(projetsFiltres)
 });
 
 // Permet d'afficher le bouton du filtre sélectionné en "actif" en changeant sa couleur etc
-const buttons = document.querySelectorAll("button");
+const buttons = document.querySelectorAll("button")
 
 for (let i = 0; i < buttons.length; i++) {
     buttons[i].addEventListener("click", function () {
-        let active = document.getElementsByClassName("active");
+        let active = document.getElementsByClassName("active")
 
         // si pas de class active
         if (active.length > 0) {
-            active[0].className = active[0].className.replace(" active", "");
+            active[0].className = active[0].className.replace(" active", "")
         }
         // Ajoute la class active au btn cliqué
-        this.className += " active";
+        this.className += " active"
     });
+}
+
+// Masque le filtre
+function hideFiltre() {
+    const filtres = document.querySelector('.filtre')
+    filtres.style.display = "none"
+}
+
+function logout() {
+    // Récupérez l'élément <a> dans la liste
+    const a = document.querySelector('nav ul li:nth-child(3) a')
+    a.innerText = 'logout'
+}
+
+const figure = document.querySelector('figure')
+const portfolioSection = document.querySelector('#portfolio')
+
+function modifierButton(parent) {
+    // Créer un élément <i>
+    const i = document.createElement("i")
+    // Ajouter une classe pour l'icône (par exemple "fa fa-pencil")
+    i.classList.add("fa-sharp", "fa-regular", "fa-pen-to-square")
+
+    // Créer un élément <button>
+    const bouton = document.createElement('button')
+    bouton.innerText = 'modifier'
+
+    // Ajouter l'icône et le bouton à l'élément parent
+    parent.appendChild(i)
+    parent.appendChild(bouton)
+}
+
+// Ajout barre au top 
+function barreModifier() {
+    const bodyElement = document.querySelector('body')
+    // création des éléments et class css
+    const barreModifier = document.createElement('div')
+    barreModifier.classList.add('barre-modifier')
+    const i = document.createElement('i')
+    i.classList.add("fa-sharp", "fa-regular", "fa-pen-to-square")
+
+    const p = document.createElement('p')
+    p.innerText = 'Mode édition'
+
+    const publish = document.createElement('button')
+    publish.innerText = 'publier les changements'
+
+    bodyElement.parentNode.insertBefore(barreModifier, bodyElement)
+    barreModifier.appendChild(i)
+    barreModifier.appendChild(p)
+    barreModifier.appendChild(publish)
+}
+
+if (sessionStorage.getItem("token") !== null) { // vérifie si la paire clé-valeur dans le sessionStorage
+    hideFiltre()
+    barreModifier()
+    logout()
+    modifierButton(figure)
+    modifierButton(portfolioSection)
 }
