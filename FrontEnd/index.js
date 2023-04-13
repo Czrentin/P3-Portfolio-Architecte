@@ -112,25 +112,9 @@ function logout() {
     a.innerText = 'logout'
 }
 
-const figure = document.querySelector('figure')
-const portfolioSection = document.querySelector('#portfolio')
-
-function modifierButton(parent) {
-    const divButton = document.createElement('div')
-    divButton.classList.add("bouton-modifier")
-    // Créer un élément <i>
-    const i = document.createElement("i")
-    // Ajouter une classe pour l'icône (par exemple "fa fa-pencil")
-    i.classList.add("fa-sharp", "fa-regular", "fa-pen-to-square")
-
-    // Créer un élément <button>
-    const bouton = document.createElement('button')
-    bouton.innerText = 'modifier'
-
-    // Ajouter l'icône et le bouton à l'élément parent
-    divButton.appendChild(i)
-    divButton.appendChild(bouton)
-    parent.appendChild(divButton)
+function modifierButton() {
+    const divButton = document.querySelector('.div--bouton-modifier')
+    divButton.style.display = "flex"
 }
 
 // Ajout barre au top 
@@ -158,6 +142,5 @@ if (sessionStorage.getItem("token") !== null) { // vérifie si la paire clé-val
     hideFiltre()
     barreModifier()
     logout()
-    modifierButton(figure)
-    modifierButton(portfolioSection)
+    modifierButton()
 }

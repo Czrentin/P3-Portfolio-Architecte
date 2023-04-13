@@ -20,16 +20,18 @@
   }
 }
 
-.bouton-modifier {
-  display: flex;
+.div--bouton-modifier {
+  display: none;
   align-items: center;
   width: 80%;
-  margin: auto;
-  button {
+  margin: 10px auto;
+  gap: 10px;
+  .bouton-modifier {
     font-family: "Work Sans";
     font-weight: 400;
     font-size: 14px;
     border: none;
     color: $black-color;
+    padding: 0;
   }
 }
