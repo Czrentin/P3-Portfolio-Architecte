@@ -19,3 +19,17 @@
     border: none;
   }
 }
+
+.bouton-modifier {
+  display: flex;
+  align-items: center;
+  width: 80%;
+  margin: auto;
+  button {
+    font-family: "Work Sans";
+    font-weight: 400;
+    font-size: 14px;
+    border: none;
+    color: $black-color;
+  }
+}

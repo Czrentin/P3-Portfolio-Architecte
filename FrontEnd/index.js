@@ -116,6 +116,8 @@ const figure = document.querySelector('figure')
 const portfolioSection = document.querySelector('#portfolio')
 
 function modifierButton(parent) {
+    const divButton = document.createElement('div')
+    divButton.classList.add("bouton-modifier")
     // Créer un élément <i>
     const i = document.createElement("i")
     // Ajouter une classe pour l'icône (par exemple "fa fa-pencil")
@@ -126,8 +128,9 @@ function modifierButton(parent) {
     bouton.innerText = 'modifier'
 
     // Ajouter l'icône et le bouton à l'élément parent
-    parent.appendChild(i)
-    parent.appendChild(bouton)
+    divButton.appendChild(i)
+    divButton.appendChild(bouton)
+    parent.appendChild(divButton)
 }
 
 // Ajout barre au top 
