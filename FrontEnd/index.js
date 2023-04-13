@@ -113,8 +113,10 @@ function logout() {
 }
 
 function modifierButton() {
-    const divButton = document.querySelector('.div--bouton-modifier')
-    divButton.style.display = "flex"
+    const divButton = Array.from(document.querySelectorAll('.div--bouton-modifier'))
+    divButton.forEach(divButton => {
+        divButton.style.display = "flex"
+    });
 }
 
 // Ajout barre au top 
@@ -143,4 +145,11 @@ if (sessionStorage.getItem("token") !== null) { // vérifie si la paire clé-val
     barreModifier()
     logout()
     modifierButton()
+}
+
+if (sessionStorage.getItem("token") !== null) { // vérifie si la paire clé-valeur dans le sessionStorage
+    const logout = document.querySelector('nav ul li:nth-child(3) a')
+    logout.addEventListener("click", function () {
+        window.sessionStorage.removeItem("token", valeurToken);
+    })
 }
