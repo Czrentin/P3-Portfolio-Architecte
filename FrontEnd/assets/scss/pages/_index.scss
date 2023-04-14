@@ -5,10 +5,13 @@
   article {
     flex: 1;
   }
+  figure {
+    padding: 20px;
+  }
   img {
     display: block;
     margin: auto;
-    width: 80%;
+    width: 100%;
   }
   h2 {
     margin-bottom: 1em;
@@ -18,7 +21,10 @@
   }
 }
 
-#portfolio h2 {
+.title-portfolio {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
   margin-bottom: 1em;
 }
