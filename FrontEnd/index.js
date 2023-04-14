@@ -1,7 +1,7 @@
 let projets = window.localStorage.getItem("projets");
 projets = JSON.parse(projets)
 
-async function chargerProjets() {
+async function chargerAPI() {
     try {
         const reponse = await fetch('http://localhost:5678/api/works');
         const projets = await reponse.json();
@@ -9,7 +9,8 @@ async function chargerProjets() {
         // Stockage des informations dans le localStorage
         window.localStorage.setItem("projets", valeurProjets);
         // Appeler la fonction pour générer les projets avec les données récupérées
-        genererProjets(projets);
+        genererProjets(projets)
+        genererGallery(projets)
     } catch (error) {
         console.error("Une erreur est survenue lors de la récupération des données des projets :", error);
     }
@@ -29,7 +30,6 @@ function genererProjets(projets) {
         imageElement.src = article.imageUrl;
         const titleElement = document.createElement("figcaption");
         titleElement.innerText = article.title;
-
         // On rattache la balise article a la section Projets
         projetElement.appendChild(imageElement);
         projetElement.appendChild(titleElement);
@@ -37,7 +37,28 @@ function genererProjets(projets) {
     }
 }
 
-chargerProjets()
+function genererGallery(projets) {
+    for (let i = 0; i < projets.length; i++) {
+
+        const article = projets[i];
+        // Récupération de l'élément du DOM qui accueillera les projets
+        const sectionProjets = document.querySelector(".gallery-modal");
+        // Création d’une balise dédiée pour un projet
+        const projetElement = document.createElement("figure");
+        projetElement.dataset.id = projets[i].id
+        // Création des balises à l'intérieur
+        const imageElement = document.createElement("img");
+        imageElement.src = article.imageUrl;
+        const titleElement = document.createElement("figcaption");
+        titleElement.innerText = 'éditer'
+        // On rattache la balise article a la section Projets
+        projetElement.appendChild(imageElement);
+        projetElement.appendChild(titleElement);
+        sectionProjets.appendChild(projetElement);
+    }
+}
+
+chargerAPI()
 
 function galleryReset() {
     document.querySelector(".gallery").innerHTML = ""
@@ -56,7 +77,7 @@ const boutonObjets = document.querySelector(".btn-objets");
 
 boutonObjets.addEventListener("click", function () {
     const projetsFiltres = projets.filter(function (projets) {
-        return projets.categoryId === 1;
+        return projets.categoryId === 1
     });
     galleryReset()
     genererProjets(projetsFiltres)
@@ -67,7 +88,7 @@ const boutonAppartements = document.querySelector(".btn-appartements");
 
 boutonAppartements.addEventListener("click", function () {
     const projetsFiltres = projets.filter(function (projets) {
-        return projets.categoryId === 2;
+        return projets.categoryId === 2
     });
     galleryReset()
     genererProjets(projetsFiltres)
@@ -78,17 +99,18 @@ const boutonHotelsRestaurants = document.querySelector(".btn-hotel-restau");
 
 boutonHotelsRestaurants.addEventListener("click", function () {
     const projetsFiltres = projets.filter(function (projets) {
-        return projets.categoryId === 3;
+        return projets.categoryId === 3
     });
     galleryReset()
     genererProjets(projetsFiltres)
 });
 
 // Permet d'afficher le bouton du filtre sélectionné en "actif" en changeant sa couleur etc
-const buttons = document.querySelectorAll("button")
+const filtres = document.querySelector('.filtre')
+const buttonsFiltres = filtres.querySelectorAll('button')
 
-for (let i = 0; i < buttons.length; i++) {
-    buttons[i].addEventListener("click", function () {
+for (let i = 0; i < buttonsFiltres.length; i++) {
+    buttonsFiltres[i].addEventListener("click", function () {
         let active = document.getElementsByClassName("active")
 
         // si pas de class active
@@ -113,7 +135,7 @@ function logout() {
 }
 
 function modifierButton() {
-    const divButton = Array.from(document.querySelectorAll('.div--bouton-modifier'))
+    const divButton = Array.from(document.querySelectorAll('.div-modifier'))
     divButton.forEach(divButton => {
         divButton.style.display = "flex"
     });
@@ -140,16 +162,58 @@ function barreModifier() {
     barreModifier.appendChild(publish)
 }
 
-if (sessionStorage.getItem("token") !== null) { // vérifie si la paire clé-valeur dans le sessionStorage
+let connected = sessionStorage.getItem("token") !== null
+
+if (connected) { // vérifie si la paire clé-valeur dans le sessionStorage
+    const logout = document.querySelector('nav ul li:nth-child(3) a')
+    logout.addEventListener("click", function () {
+        window.sessionStorage.removeItem("token");
+    })
+}
+
+if (connected) { // vérifie si la paire clé-valeur dans le sessionStorage
     hideFiltre()
     barreModifier()
     logout()
     modifierButton()
 }
 
-if (sessionStorage.getItem("token") !== null) { // vérifie si la paire clé-valeur dans le sessionStorage
-    const logout = document.querySelector('nav ul li:nth-child(3) a')
-    logout.addEventListener("click", function () {
-        window.sessionStorage.removeItem("token", valeurToken);
-    })
+let modal = null
+
+const openModal = function (e) {
+    e.preventDefault()
+    const target = document.querySelector(e.target.getAttribute('href'))
+    target.style.display = 'flex'
+    target.removeAttribute('aria-hidden')
+    target.setAttribute('aria-modal', 'true')
+    modal = target
+    modal.addEventListener('click', closeModal)
+    modal.querySelector('.close-modal').addEventListener('click', closeModal)
+    modal.querySelector('.modal-wrapper').addEventListener('click', stopPropagation)
 }
+
+const closeModal = function (e) {
+    if (modal === null) return
+    e.preventDefault()
+    modal.style.display = 'none'
+    modal.setAttribute('aria-hidden', 'true')
+    modal.removeAttribute('aria-modal')
+    modal.removeEventListener('click', closeModal)
+    modal.querySelector('.close-modal').removeEventListener('click', closeModal)
+    modal.querySelector('.modal-wrapper').removeEventListener('click', stopPropagation)
+    modal = null
+}
+
+const stopPropagation = function (e) {
+    e.stopPropagation()
+}
+
+document.querySelectorAll('.modifier').forEach(a => {
+    a.addEventListener('click', openModal)
+})
+
+window.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' || e.key === 'Esc') {
+        closeModal(e)
+    }
+})
