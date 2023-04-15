@@ -60,49 +60,26 @@ function genererGallery(projets) {
 
 chargerAPI()
 
+//
+// Partie pour le filtre
+//
+
 function galleryReset() {
     document.querySelector(".gallery").innerHTML = ""
 }
 
-// Filtre pour catégorie objet
-const boutonAll = document.querySelector(".btn-all");
+const boutonsTri = document.querySelectorAll(".btn-tri");
 
-boutonAll.addEventListener("click", function () {
-    galleryReset()
-    genererProjets(projets)
-});
-
-// Filtre pour catégorie objet
-const boutonObjets = document.querySelector(".btn-objets");
-
-boutonObjets.addEventListener("click", function () {
-    const projetsFiltres = projets.filter(function (projets) {
-        return projets.categoryId === 1
+// Fonction qui tri en fonction du data-category 
+boutonsTri.forEach(function (boutonTri) {
+    boutonTri.addEventListener("click", function () {
+        const categoryId = parseInt(boutonTri.dataset.category);
+        const projetsFiltres = projets.filter(function (projet) {
+            return projet.categoryId === categoryId;
+        });
+        galleryReset();
+        genererProjets(projetsFiltres);
     });
-    galleryReset()
-    genererProjets(projetsFiltres)
-});
-
-// Filtre pour catégorie appartements
-const boutonAppartements = document.querySelector(".btn-appartements");
-
-boutonAppartements.addEventListener("click", function () {
-    const projetsFiltres = projets.filter(function (projets) {
-        return projets.categoryId === 2
-    });
-    galleryReset()
-    genererProjets(projetsFiltres)
-});
-
-// Filtre pour catégorie Hotels & restaurants
-const boutonHotelsRestaurants = document.querySelector(".btn-hotel-restau");
-
-boutonHotelsRestaurants.addEventListener("click", function () {
-    const projetsFiltres = projets.filter(function (projets) {
-        return projets.categoryId === 3
-    });
-    galleryReset()
-    genererProjets(projetsFiltres)
 });
 
 // Permet d'afficher le bouton du filtre sélectionné en "actif" en changeant sa couleur etc
@@ -121,6 +98,10 @@ for (let i = 0; i < buttonsFiltres.length; i++) {
         this.className += " active"
     });
 }
+
+//
+// Partie connectée
+//
 
 // Ajout barre au mode édition 
 function barreModifier() {
@@ -178,9 +159,9 @@ if (connected) { // vérifie si la paire clé-valeur dans le sessionStorage
     modifierButton()
 }
 
-
-
+//
 // Partie pour la gestion de la modale
+//
 
 let modal = null
 
