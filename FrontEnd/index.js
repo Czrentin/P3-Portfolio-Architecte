@@ -122,6 +122,27 @@ for (let i = 0; i < buttonsFiltres.length; i++) {
     });
 }
 
+// Ajout barre au mode édition 
+function barreModifier() {
+    const bodyElement = document.querySelector('body')
+
+    const barreModifier = document.createElement('div')
+    barreModifier.classList.add('barre-modifier')
+    const i = document.createElement('i')
+    i.classList.add("fa-sharp", "fa-regular", "fa-pen-to-square")
+
+    const p = document.createElement('p')
+    p.innerText = 'Mode édition'
+
+    const publish = document.createElement('button')
+    publish.innerText = 'publier les changements'
+
+    bodyElement.parentNode.insertBefore(barreModifier, bodyElement)
+    barreModifier.appendChild(i)
+    barreModifier.appendChild(p)
+    barreModifier.appendChild(publish)
+}
+
 // Masque le filtre
 function hideFiltre() {
     const filtres = document.querySelector('.filtre')
@@ -141,27 +162,6 @@ function modifierButton() {
     });
 }
 
-// Ajout barre au top 
-function barreModifier() {
-    const bodyElement = document.querySelector('body')
-    // création des éléments et class css
-    const barreModifier = document.createElement('div')
-    barreModifier.classList.add('barre-modifier')
-    const i = document.createElement('i')
-    i.classList.add("fa-sharp", "fa-regular", "fa-pen-to-square")
-
-    const p = document.createElement('p')
-    p.innerText = 'Mode édition'
-
-    const publish = document.createElement('button')
-    publish.innerText = 'publier les changements'
-
-    bodyElement.parentNode.insertBefore(barreModifier, bodyElement)
-    barreModifier.appendChild(i)
-    barreModifier.appendChild(p)
-    barreModifier.appendChild(publish)
-}
-
 let connected = sessionStorage.getItem("token") !== null
 
 if (connected) { // vérifie si la paire clé-valeur dans le sessionStorage
@@ -178,8 +178,18 @@ if (connected) { // vérifie si la paire clé-valeur dans le sessionStorage
     modifierButton()
 }
 
+
+
+// Partie pour la gestion de la modale
+
 let modal = null
 
+// Bloquer le clic pour fermer la modale 
+const stopPropagation = function (e) {
+    e.stopPropagation()
+}
+
+// Ouverture de la modale
 const openModal = function (e) {
     e.preventDefault()
     const target = document.querySelector(e.target.getAttribute('href'))
@@ -192,6 +202,7 @@ const openModal = function (e) {
     modal.querySelector('.modal-wrapper').addEventListener('click', stopPropagation)
 }
 
+// Fermeture de la modale
 const closeModal = function (e) {
     if (modal === null) return
     e.preventDefault()
@@ -204,14 +215,12 @@ const closeModal = function (e) {
     modal = null
 }
 
-const stopPropagation = function (e) {
-    e.stopPropagation()
-}
-
+// Ouverture de la modale au click
 document.querySelectorAll('.modifier').forEach(a => {
     a.addEventListener('click', openModal)
 })
 
+// Fermeture de la modale avec le clavier
 window.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' || e.key === 'Esc') {
         closeModal(e)
