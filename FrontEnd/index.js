@@ -37,27 +37,6 @@ function genererProjets(projets) {
     }
 }
 
-function genererGallery(projets) {
-    for (let i = 0; i < projets.length; i++) {
-
-        const article = projets[i];
-        // Récupération de l'élément du DOM qui accueillera les projets
-        const sectionProjets = document.querySelector(".gallery-modal");
-        // Création d’une balise dédiée pour un projet
-        const projetElement = document.createElement("figure");
-        projetElement.dataset.id = projets[i].id
-        // Création des balises à l'intérieur
-        const imageElement = document.createElement("img");
-        imageElement.src = article.imageUrl;
-        const titleElement = document.createElement("figcaption");
-        titleElement.innerText = 'éditer'
-        // On rattache la balise article a la section Projets
-        projetElement.appendChild(imageElement);
-        projetElement.appendChild(titleElement);
-        sectionProjets.appendChild(projetElement);
-    }
-}
-
 chargerAPI()
 
 //
@@ -103,6 +82,25 @@ for (let i = 0; i < buttonsFiltres.length; i++) {
 // Partie connectée
 //
 
+// Masque le filtre
+function hideFiltre() {
+    const filtres = document.querySelector('.filtre')
+    filtres.style.display = "none"
+}
+// Change le login en logout
+function logout() {
+    // Récupérez l'élément <a> dans la liste
+    const a = document.querySelector('nav ul li:nth-child(3) a')
+    a.innerText = 'logout'
+}
+// Affiche les boutons modifier pour afficher la modale
+function modifierButton() {
+    const divButton = Array.from(document.querySelectorAll('.div-modifier'))
+    divButton.forEach(divButton => {
+        divButton.style.display = "flex"
+    });
+}
+
 // Ajout barre au mode édition 
 function barreModifier() {
     const bodyElement = document.querySelector('body')
@@ -124,25 +122,6 @@ function barreModifier() {
     barreModifier.appendChild(publish)
 }
 
-// Masque le filtre
-function hideFiltre() {
-    const filtres = document.querySelector('.filtre')
-    filtres.style.display = "none"
-}
-
-function logout() {
-    // Récupérez l'élément <a> dans la liste
-    const a = document.querySelector('nav ul li:nth-child(3) a')
-    a.innerText = 'logout'
-}
-
-function modifierButton() {
-    const divButton = Array.from(document.querySelectorAll('.div-modifier'))
-    divButton.forEach(divButton => {
-        divButton.style.display = "flex"
-    });
-}
-
 let connected = sessionStorage.getItem("token") !== null
 
 if (connected) { // vérifie si la paire clé-valeur dans le sessionStorage
@@ -154,14 +133,92 @@ if (connected) { // vérifie si la paire clé-valeur dans le sessionStorage
 
 if (connected) { // vérifie si la paire clé-valeur dans le sessionStorage
     hideFiltre()
-    barreModifier()
     logout()
     modifierButton()
+    barreModifier()
 }
 
 //
 // Partie pour la gestion de la modale
 //
+
+// Créer l'élément <aside>
+const aside = document.createElement("aside");
+aside.id = "modal";
+aside.classList.add("modal");
+aside.setAttribute("aria-hidden", "true");
+aside.setAttribute("role", "dialog");
+aside.setAttribute("aria-labelledby", "titlemodal");
+
+// Créer la structure de l'élément <aside>
+const modalWrapper = document.createElement("div");
+modalWrapper.classList.add("modal-wrapper");
+
+const divCloseModal = document.createElement("div");
+divCloseModal.classList.add("div-close-modal");
+
+const buttonCloseModal = document.createElement("button");
+buttonCloseModal.classList.add("close-modal");
+
+const spanCloseModal = document.createElement("span");
+spanCloseModal.textContent = "Fermer la boite modale";
+
+const iconCloseModal = document.createElement("i");
+iconCloseModal.classList.add("fa-solid", "fa-x");
+
+buttonCloseModal.appendChild(spanCloseModal);
+buttonCloseModal.appendChild(iconCloseModal);
+divCloseModal.appendChild(buttonCloseModal);
+
+const titleModal = document.createElement("h2");
+titleModal.id = "titlemodal";
+titleModal.textContent = "Galerie photo";
+
+const galleryModal = document.createElement("div");
+galleryModal.classList.add("gallery-modal");
+
+const hr = document.createElement("hr");
+
+const buttonAddPicture = document.createElement("button");
+buttonAddPicture.classList.add("add-picture");
+buttonAddPicture.textContent = "Ajouter une photo";
+
+const pDeleteGallery = document.createElement("p");
+pDeleteGallery.textContent = "Supprimer la galerie";
+
+modalWrapper.appendChild(divCloseModal);
+modalWrapper.appendChild(titleModal);
+modalWrapper.appendChild(galleryModal);
+modalWrapper.appendChild(hr);
+modalWrapper.appendChild(buttonAddPicture);
+modalWrapper.appendChild(pDeleteGallery);
+
+aside.appendChild(modalWrapper);
+
+// Insérer l'élément <aside> après la section avec l'ID "introduction"
+const introductionSection = document.getElementById("introduction");
+introductionSection.parentNode.insertBefore(aside, introductionSection.nextSibling);
+
+function genererGallery(projets) {
+    for (let i = 0; i < projets.length; i++) {
+
+        const article = projets[i];
+        // Récupération de l'élément du DOM qui accueillera les projets
+        const sectionProjets = document.querySelector(".gallery-modal");
+        // Création d’une balise dédiée pour un projet
+        const projetElement = document.createElement("figure");
+        projetElement.dataset.id = projets[i].id
+        // Création des balises à l'intérieur
+        const imageElement = document.createElement("img");
+        imageElement.src = article.imageUrl;
+        const titleElement = document.createElement("figcaption");
+        titleElement.innerText = 'éditer'
+        // On rattache la balise article a la section Projets
+        projetElement.appendChild(imageElement);
+        projetElement.appendChild(titleElement);
+        sectionProjets.appendChild(projetElement);
+    }
+}
 
 let modal = null
 
