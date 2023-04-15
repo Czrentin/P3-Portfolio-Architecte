@@ -64,23 +64,23 @@ chargerAPI()
 // Partie pour le filtre
 //
 
-function galleryReset() {
-    document.querySelector(".gallery").innerHTML = ""
-}
-
-const boutonsTri = document.querySelectorAll(".btn-tri");
-
+const boutonsTri = document.querySelectorAll(".btn-tri")
 // Fonction qui tri en fonction du data-category 
 boutonsTri.forEach(function (boutonTri) {
     boutonTri.addEventListener("click", function () {
-        const categoryId = parseInt(boutonTri.dataset.category);
-        const projetsFiltres = projets.filter(function (projet) {
-            return projet.categoryId === categoryId;
-        });
-        galleryReset();
-        genererProjets(projetsFiltres);
-    });
-});
+        const categoryId = parseInt(boutonTri.dataset.category)
+        let projetsFiltres
+        if (categoryId === 0) {
+            projetsFiltres = projets
+        } else {
+            projetsFiltres = projets.filter(function (projet) {
+                return projet.categoryId === categoryId
+            })
+        }
+        document.querySelector(".gallery").innerHTML = ""
+        genererProjets(projetsFiltres)
+    })
+})
 
 // Permet d'afficher le bouton du filtre sélectionné en "actif" en changeant sa couleur etc
 const filtres = document.querySelector('.filtre')
