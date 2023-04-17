@@ -1,5 +1,4 @@
 .barre-modifier {
-  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -10,33 +9,25 @@
   p {
     font-family: "Work Sans";
   }
-  button {
-    font-family: "Work Sans";
-    font-size: 14px;
-    font-weight: 500;
-    color: $black-color;
-    background-color: $white-color;
-    border: none;
-  }
 }
 
 figure {
-  .div-modifier {
+  .div-button-modifier {
     margin-top: 10px;
   }
 }
 
 .title-portfolio {
-  .div-modifier {
+  .div-button-modifier {
     margin-left: 20px;
   }
 }
 
-.div-modifier {
+.div-button-modifier {
   display: none;
   align-items: center;
   gap: 10px;
-  .modifier {
+  .button-modifier {
     font-family: "Work Sans";
     font-weight: 400;
     font-size: 14px;
@@ -48,7 +39,7 @@ figure {
   }
 }
 
-.modal {
+.background-modal {
   display: none;
   position: fixed;
   top: 0;
@@ -58,50 +49,43 @@ figure {
   background: rgba(0, 0, 0, 0.3);
   align-items: center;
   justify-content: center;
-  .modal-wrapper {
-    background-color: $white-color;
-    width: 55%;
-    height: 75%;
-    max-width: calc(100vw - 30px);
-    max-height: calc(100vh - 30px);
-    padding: 30px;
-    overflow: auto;
-    display: grid;
-    align-items: center;
-    justify-items: center;
-    h2 {
-      font-family: "Work Sans";
-      font-weight: 400;
-      font-size: 26px;
-      color: $black-color;
-    }
-    hr {
-      width: 80%;
-    }
-    .add-picture {
-      color: $white-color;
-      background-color: $green-color;
-      margin: 40px 0 25px;
-    }
-    p {
-      font-family: "Syne";
-      color: #d65353;
-      font-size: 14px;
-      font-weight: 400;
-    }
-  }
 }
 
-.div-close-modal {
+.header-modal {
   display: flex;
   width: 100%;
   justify-content: flex-end;
   .close-modal {
     border: none;
+    background-color: transparent;
     color: $black-color;
+    cursor: pointer;
     span {
       display: none;
     }
+  }
+}
+
+.container-modal {
+  background-color: $white-color;
+  width: 60%;
+  height: 80%;
+  max-width: calc(100vw - 30px);
+  max-height: calc(100vh - 30px);
+  padding: 30px;
+  overflow: auto;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  h2 {
+    font-family: "Work Sans";
+    font-weight: 400;
+    font-size: 26px;
+    color: $black-color;
+  }
+  hr {
+    width: 80%;
+    margin-bottom: 40px;
   }
 }
 
@@ -114,5 +98,31 @@ figure {
   margin: 45px 0;
   img {
     width: 100%;
+  }
+  figure {
+    position: relative;
+  }
+  i {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    padding: 4px;
+    font-size: 12px;
+    color: $white-color;
+    background: $black-color;
+    border-radius: 2px;
+  }
+}
+
+.footer-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  p {
+    margin-top: 25px;
+    font-family: "Syne";
+    color: #d65353;
+    font-size: 14px;
+    font-weight: 400;
   }
 }

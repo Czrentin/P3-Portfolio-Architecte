@@ -32,10 +32,13 @@
     <main>
       <section id="introduction">
         <figure>
-          <img src="./assets/images/sophie-bluel.png" alt="" />
-          <div class="div-modifier">
+          <img
+            src="./assets/images/sophie-bluel.png"
+            alt="Portrait de Sophie"
+          />
+          <div class="div-button-modifier">
             <i class="fa-sharp fa-regular fa-pen-to-square"></i>
-            <a href="#modal" class="modifier">modifier</a>
+            <a href="#modal" class="button-modifier">modifier</a>
           </div>
         </figure>
         <article>
@@ -58,34 +61,56 @@
         </article>
       </section>
 
+      <aside
+        id="modal"
+        class="background-modal"
+        aria-hidden="true"
+        role="dialog"
+        aria-labelledby="titlemodal"
+      >
+        <div class="container-modal">
+          <div class="header-modal">
+            <button class="close-modal">
+              <span>Fermer la boite modale</span>
+              <i class="fa-solid fa-x"></i>
+            </button>
+          </div>
+          <h2 id="titlemodal">Galerie photo</h2>
+          <div class="gallery-modal"></div>
+          <hr />
+          <div class="footer-modal">
+            <button class="btn-green">Ajouter une photo</button>
+            <p>Supprimer la galerie</p>
+          </div>
+        </div>
+      </aside>
+
       <section id="portfolio">
         <div class="title-portfolio">
           <h2>Mes Projets</h2>
-          <div class="div-modifier">
+          <div class="div-button-modifier">
             <i class="fa-sharp fa-regular fa-pen-to-square"></i>
-            <a href="#modal" class="modifier">modifier</a>
+            <a href="#modal" class="button-modifier">modifier</a>
           </div>
         </div>
 
         <nav class="filtre">
           <ul>
             <li>
-              <button class="btn-tri btn-all active" data-category="0">
+              <button class="btn-transparent btn-green" data-category="0">
                 Tous
               </button>
             </li>
             <li>
-              <button class="btn-tri btn-objets" data-category="1">
-                Objets
-              </button>
+              <button class="btn-transparent" data-category="1">Objets</button>
             </li>
             <li>
-              <button class="btn-tri btn-appartements" data-category="2">
+              <button class="btn-transparent" data-category="2">
                 Appartements
               </button>
             </li>
             <li>
-              <button class="btn-tri btn-hotel-restau" data-category="3">
+              <button class="btn-transparent" data-category="3">
                 Hôtels & restaurants
               </button>
             </li>
