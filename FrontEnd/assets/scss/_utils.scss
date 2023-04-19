@@ -3,31 +3,3 @@ $orange-color: #b1663c;
 $black-color: #000;
 $white-color: #fff;
 $bg-color: #fffef8;
-
-button {
-  font-family: "Syne";
-  font-size: 16px;
-  padding: 10px 20px;
-  border-radius: 60px;
-  border: 1px solid $green-color;
-  cursor: pointer;
-}
-
-.btn-transparent {
-  background-color: transparent;
-  color: $green-color;
-}
-
-.btn-green {
-  background-color: $green-color;
-  color: $white-color;
-}
-
-.btn-white {
-  font-family: "Work Sans";
-  font-size: 14px;
-  font-weight: 500;
-  background-color: #fff;
-  color: $black-color;
-  border: none;
-}

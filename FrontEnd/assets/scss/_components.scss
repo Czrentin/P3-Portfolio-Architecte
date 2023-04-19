@@ -1,0 +1,50 @@
+button {
+  font-family: "Syne";
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 60px;
+  cursor: pointer;
+  border: none;
+}
+
+.btn {
+  font-family: "Syne";
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 60px;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  width: 235px;
+  text-align: center;
+}
+
+.btn-transparent {
+  background-color: transparent;
+  color: $green-color;
+  border: 1px solid $green-color;
+}
+
+.btn-green {
+  background-color: $green-color;
+  color: $white-color;
+}
+
+.btn-white {
+  font-family: "Work Sans";
+  font-size: 14px;
+  font-weight: 500;
+  background-color: #fff;
+  color: $black-color;
+  border: none;
+}
+
+.btn-blue {
+  color: #306685;
+  background: #cbd6dc;
+  border-radius: 50px;
+  font-family: "Work Sans";
+  font-size: 14px;
+  padding: 10px 30px;
+  cursor: pointer;
+}

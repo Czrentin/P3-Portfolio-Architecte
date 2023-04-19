@@ -1,70 +1,13 @@
 @import "./scss/base";
 @import "./scss/utils";
-@import "./scss/connected";
+@import "./scss/layouts";
+@import "./scss/components";
+@import "./scss/pages/connected";
 @import "./scss/pages/index";
 @import "./scss/pages/login";
 
 * {
   font: inherit;
-}
-
-body {
-  background-color: $bg-color;
-  max-width: 1140px;
-  margin: auto;
-  font-family: "Work Sans";
-}
-
-header {
-  display: flex;
-  justify-content: space-between;
-  margin: 50px 0;
-}
-
-h1 {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  font-family: "Syne";
-  font-size: 22px;
-  font-weight: 800;
-  color: $orange-color;
-  span {
-    font-family: "Work Sans";
-    font-size: 10px;
-    letter-spacing: 0.1em;
-  }
-}
-
-nav ul {
-  display: flex;
-  align-items: center;
-  list-style-type: none;
-  li {
-    padding: 0 10px;
-    font-size: 1.2em;
-    &:hover {
-      color: $orange-color;
-    }
-    a {
-      color: $black-color;
-      text-decoration: none;
-      &:hover {
-        color: $orange-color;
-      }
-    }
-  }
-}
-
-section {
-  margin: 50px 0;
-}
-
-h2 {
-  font-family: "Syne";
-  font-weight: 700;
-  font-size: 30px;
-  color: $green-color;
 }
 
 input[type="submit"] {
@@ -74,17 +17,8 @@ input[type="submit"] {
   background-color: $green-color;
   margin: 2em auto;
   width: 180px;
+  border: none;
   text-align: center;
   border-radius: 60px;
   cursor: pointer;
-}
-
-footer {
-  background-color: $white-color;
-}
-
-footer nav ul {
-  display: flex;
-  justify-content: flex-end;
-  padding: 2em;
 }
