@@ -152,7 +152,7 @@ if (connected) {
 
 let modal = null
 
-// Bloquer le clic pour fermer la modale 
+// Bloquer le clic pour fermer la modale uniquement dedans
 const stopPropagation = function (e) {
     e.stopPropagation()
 }
@@ -160,14 +160,18 @@ const stopPropagation = function (e) {
 // Ouverture de la modale
 const openModal = function (e) {
     e.preventDefault()
-    const target = document.querySelector(e.target.getAttribute('href'))
+    const target = document.querySelector(e.currentTarget.getAttribute('href'))
     target.style.display = 'flex'
     target.removeAttribute('aria-hidden')
     target.setAttribute('aria-modal', 'true')
     modal = target
     modal.addEventListener('click', closeModal)
-    modal.querySelector('.close-modal').addEventListener('click', closeModal)
-    modal.querySelector('.container-modal').addEventListener('click', stopPropagation)
+    modal.querySelectorAll('.close-modal').forEach(a => {
+        a.addEventListener('click', closeModal)
+    })
+    modal.querySelectorAll('.container-modal').forEach(a => {
+        a.addEventListener('click', stopPropagation)
+    })
 }
 
 // Fermeture de la modale
@@ -178,14 +182,21 @@ const closeModal = function (e) {
     modal.setAttribute('aria-hidden', 'true')
     modal.removeAttribute('aria-modal')
     modal.removeEventListener('click', closeModal)
-    modal.querySelector('.close-modal').removeEventListener('click', closeModal)
-    modal.querySelector('.container-modal').removeEventListener('click', stopPropagation)
+    modal.querySelectorAll('.close-modal').forEach(a => {
+        a.removeEventListener('click', closeModal)
+    })
+    modal.querySelectorAll('.container-modal').forEach(a => {
+        a.removeEventListener('click', stopPropagation)
+    })
     modal = null
 }
 
 // Ouverture de la modale au click
-document.querySelectorAll('.button-modifier').forEach(a => {
-    a.addEventListener('click', openModal)
+document.querySelectorAll('.open-modal').forEach(a => {
+    a.addEventListener('click', function (e) {
+        closeModal(e)
+        openModal(e)
+    })
 })
 
 // Fermeture de la modale avec le clavier
@@ -194,3 +205,39 @@ window.addEventListener('keydown', function (e) {
         closeModal(e)
     }
 })
+
+function ajoutProject() {
+    const formulaireAjout = document.querySelector("");
+    formulaireAjout.addEventListener("submit", function (event) {
+        event.preventDefault();
+        // Création de l’objet du nouvel avis.
+        const newProject = {
+            image: event.target.querySelector("[name=image_uploads]").value,
+            title: event.target.querySelector("[name=title").value,
+            category: event.target.querySelector("[name=category]").value,
+        };
+        // Création de la charge utile au format JSON
+        const chargeUtile = JSON.stringify(avis);
+        // Appel de la fonction fetch avec toutes les informations nécessaires
+        fetch("http://localhost:5678/api/works", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: chargeUtile
+        });
+    });
+
+}
+
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        var imgPreview = document.getElementById("img-preview");
+
+        reader.onload = function (e) {
+            imgPreview.src = e.target.result;
+        };
+
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
