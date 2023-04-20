@@ -113,20 +113,26 @@ if (connected) {
 
     // Change le login en logout
     const a = document.querySelector('nav ul li:nth-child(3) a')
+    a.setAttribute("href", "./index.html");
     a.innerText = 'logout'
     // Supprime le token quand in appui sur logout
     a.addEventListener("click", function () {
         window.sessionStorage.removeItem("token");
     })
 
+    // Bouge le h2 pour être centré
+    const titlePortfolio = document.querySelector('.title-portfolio')
+    const h2 = titlePortfolio.querySelector('h2')
+    h2.style.marginLeft = "85px"
+
     // Afficher les boutons modifier pour la modale
-    const divButton = Array.from(document.querySelectorAll('.div-button-modifier'))
+    const divButton = Array.from(document.querySelectorAll('.div-button-modal'))
     divButton.forEach(divButton => {
         divButton.style.display = "flex"
     })
 
     // Ajout barre mode édition
-    const bodyElement = document.querySelector('body')
+    const headerElement = document.querySelector('header')
 
     const barreModifier = document.createElement('div')
     barreModifier.classList.add('barre-modifier')
@@ -137,10 +143,10 @@ if (connected) {
     p.innerText = 'Mode édition'
 
     const publish = document.createElement('button')
-    publish.classList.add('btn-white')
+    publish.classList.add('btn')
     publish.innerText = 'publier les changements'
 
-    bodyElement.parentNode.insertBefore(barreModifier, bodyElement)
+    headerElement.parentNode.insertBefore(barreModifier, headerElement)
     barreModifier.appendChild(i)
     barreModifier.appendChild(p)
     barreModifier.appendChild(publish)
@@ -207,37 +213,43 @@ window.addEventListener('keydown', function (e) {
 })
 
 function ajoutProject() {
-    const formulaireAjout = document.querySelector("");
+    const formulaireAjout = document.querySelector(".form-modal")
     formulaireAjout.addEventListener("submit", function (event) {
-        event.preventDefault();
-        // Création de l’objet du nouvel avis.
+        event.preventDefault()
+        // Création de l’objet du nouveau projet.
         const newProject = {
             image: event.target.querySelector("[name=image_uploads]").value,
             title: event.target.querySelector("[name=title").value,
             category: event.target.querySelector("[name=category]").value,
-        };
+        }
+
+        // Obtenir le token de la session storage
+        const token = JSON.parse(sessionStorage.getItem('token'))
+
         // Création de la charge utile au format JSON
-        const chargeUtile = JSON.stringify(avis);
+        const chargeUtile = JSON.stringify(newProject)
         // Appel de la fonction fetch avec toutes les informations nécessaires
         fetch("http://localhost:5678/api/works", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'Bearer ' + token,
+            },
             body: chargeUtile
-        });
-    });
-
+        }).then(res => res.json())
+            .then(chargeUtile => console.log(chargeUtile))
+            .catch(error => console.error("Une erreur est survenue lors de l'envoie des données du projets :", error))
+    })
 }
 
 function readURL(input) {
     if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        var imgPreview = document.getElementById("img-preview");
+        let reader = new FileReader()
+        const imgPreview = document.getElementById("img-preview")
 
         reader.onload = function (e) {
-            imgPreview.src = e.target.result;
-        };
-
-        reader.readAsDataURL(input.files[0]);
+            imgPreview.src = e.target.result
+        }
+        reader.readAsDataURL(input.files[0])
     }
 }
-

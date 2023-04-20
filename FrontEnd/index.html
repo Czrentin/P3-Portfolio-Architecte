@@ -36,9 +36,9 @@
             src="./assets/images/sophie-bluel.png"
             alt="Portrait de Sophie"
           />
-          <div class="div-button-modifier">
+          <div class="div-button-modal">
             <i class="fa-sharp fa-regular fa-pen-to-square"></i>
-            <a href="#modal1" class="button-modifier open-modal">modifier</a>
+            <a href="#modal1" class="button-modal open-modal">modifier</a>
           </div>
         </figure>
         <article>
@@ -61,11 +61,10 @@
         </article>
       </section>
 
-      <aside
+      <dialog
         id="modal1"
         class="background-modal"
         aria-hidden="true"
-        role="dialog"
         aria-labelledby="titlemodal"
       >
         <div class="container-modal">
@@ -75,7 +74,7 @@
               <i class="fa-solid fa-x"></i>
             </button>
           </div>
-          <h2 id="titlemodal">Galerie photo</h2>
+          <h2 class="titlemodal">Galerie photo</h2>
           <div class="gallery-modal"></div>
           <hr />
           <div class="footer-modal">
@@ -85,19 +84,17 @@
             <p>Supprimer la galerie</p>
           </div>
         </div>
-      </aside>
+      </dialog>
 
-      <aside
+      <dialog
         id="modal2"
         class="background-modal"
         aria-hidden="true"
-        role="dialog"
         aria-labelledby="titlemodal"
       >
         <div class="container-modal">
           <div class="header-modal">
             <a href="#modal1" class="open-modal">
-              ICI
               <span>Retour à la précédente boite modale</span>
               <i class="fa-solid fa-arrow-left"></i>
             </a>
@@ -107,10 +104,10 @@
             </button>
           </div>
 
-          <h2 id="titlemodal">Ajout photo</h2>
-          <form action="" method="post">
+          <h2 class="titlemodal">Ajout photo</h2>
+          <form class="form-modal">
             <div class="post-img">
-              <img id="img-preview" src="#" />
+              <img id="img-preview" src="#" alt="L'image à poster" />
               <i class="fa-sharp fa-regular fa-image"></i>
               <label for="image_uploads" class="btn-blue">
                 + Ajouter photo
@@ -122,54 +119,56 @@
                   accept=".jpg, .jpeg, .png"
                   multiple
                   class="btn-blue"
-                  placeholder="+ Ajouter photo"
+                  required
                 />
               </label>
               <p>jpg, png : 4mo max</p>
             </div>
 
             <label for="title">Titre</label>
-            <input type="text" name="title" id="title" />
+            <input type="text" name="title" id="title" required />
 
             <label for="category">Catégorie</label>
-            <select name="category" id="category">
-              <option value="Default"></option>
-              <option value="">Objets</option>
-              <option value="">Appartements</option>
-              <option value="">Hôtels & restaurants</option>
+            <select name="category" id="category" required>
+              <option value="" selected></option>
+              <option value="1">Objets</option>
+              <option value="2">Appartements</option>
+              <option value="3">Hôtels & restaurants</option>
             </select>
             <hr />
-            <input type="submit" value="Valider" />
+            <button type="submit" class="btn btn-green">Valider</button>
           </form>
         </div>
-      </aside>
+      </dialog>
 
       <section id="portfolio">
         <div class="title-portfolio">
           <h2>Mes Projets</h2>
-          <div class="div-button-modifier">
+          <div class="div-button-modal">
             <i class="fa-sharp fa-regular fa-pen-to-square"></i>
-            <a href="#modal1" class="button-modifier open-modal">modifier</a>
+            <a href="#modal1" class="button-modal open-modal">modifier</a>
           </div>
         </div>
 
         <nav class="filtre">
           <ul>
             <li>
-              <button class="btn-transparent btn-green" data-category="0">
+              <button class="btn btn-transparent btn-green" data-category="0">
                 Tous
               </button>
             </li>
             <li>
-              <button class="btn-transparent" data-category="1">Objets</button>
+              <button class="btn btn-transparent" data-category="1">
+                Objets
+              </button>
             </li>
             <li>
-              <button class="btn-transparent" data-category="2">
+              <button class="btn btn-transparent" data-category="2">
                 Appartements
               </button>
             </li>
             <li>
-              <button class="btn-transparent" data-category="3">
+              <button class="btn btn-transparent" data-category="3">
                 Hôtels & restaurants
               </button>
             </li>
@@ -188,7 +187,7 @@
           <input type="email" name="email" id="email" />
           <label for="message">Message</label>
           <textarea name="message" id="message" cols="30" rows="10"></textarea>
-          <input type="submit" value="Envoyer" />
+          <button type="submit" class="btn btn-green">Envoyer</button>
         </form>
       </section>
     </main>

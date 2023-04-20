@@ -3,39 +3,43 @@
   justify-content: center;
   align-items: center;
   background-color: $black-color;
-  color: $white-color;
+
   padding: 10px;
   gap: 20px;
-  p {
+  > * {
     font-family: "Work Sans";
+    color: $white-color;
+  }
+  button {
+    font-size: 14px;
+    font-weight: 500;
+    background-color: #fff;
+    color: $black-color;
+    border: none;
   }
 }
 
-figure {
-  .div-button-modifier {
+.div-button-modal {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  .button-modal {
+    font-size: 14px;
+    border: none;
+    color: $black-color;
+    text-decoration: none;
+  }
+}
+
+#introduction figure {
+  .div-button-modal {
     margin-top: 10px;
   }
 }
 
 .title-portfolio {
-  .div-button-modifier {
+  .div-button-modal {
     margin-left: 20px;
-  }
-}
-
-.div-button-modifier {
-  display: none;
-  align-items: center;
-  gap: 10px;
-  .button-modifier {
-    font-family: "Work Sans";
-    font-weight: 400;
-    font-size: 14px;
-    border: none;
-    color: $black-color;
-    padding: 0;
-    line-height: normal;
-    text-decoration: none;
   }
 }
 
@@ -55,6 +59,14 @@ figure {
   display: flex;
   width: 100%;
   justify-content: flex-end;
+  align-items: center;
+  i {
+    font-size: 16px;
+    color: $black-color;
+  }
+  a span {
+    display: none;
+  }
   .close-modal {
     border: none;
     background-color: transparent;
@@ -66,79 +78,6 @@ figure {
   }
 }
 
-#modal2 {
-  .container-modal {
-    display: flex;
-    flex-direction: column;
-    .header-modal {
-      justify-content: space-between;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-      width: 70%;
-      max-width: 420px;
-      div {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        height: 150px;
-        background: #e8f1f7;
-        justify-content: center;
-        border-radius: 3px;
-        margin: 30px 0;
-        i {
-          font-size: 46px;
-          color: #b9c5cc;
-          margin-bottom: 10px;
-        }
-        p {
-          font-family: "Work Sans";
-          font-weight: 400;
-          font-size: 10px;
-          color: #444444;
-        }
-      }
-      label {
-        font-family: "Work Sans";
-        font-weight: 500;
-        font-size: 14px;
-        line-height: 16px;
-        color: #3d3d3d;
-        margin-bottom: 10px;
-      }
-      input,
-      select {
-        margin-bottom: 20px;
-        padding: 15px;
-        border: none;
-        box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
-      }
-      select {
-        border-right: 15px solid transparent;
-      }
-      input[type="file"] {
-        display: none;
-      }
-      input[type="submit"] {
-        margin: 0 auto;
-        width: 235px;
-        text-align: center;
-      }
-      hr {
-        width: 100%;
-        margin: 25px 0;
-      }
-    }
-  }
-}
-
-.post-img {
-  img {
-    display: none;
-  }
-}
-
 .container-modal {
   background-color: $white-color;
   width: 50%;
@@ -146,8 +85,8 @@ figure {
   max-width: calc(100vw - 30px);
   max-height: calc(100vh - 30px);
   padding: 30px;
+  border-radius: 10px;
   overflow: auto;
-  display: grid;
   align-items: center;
   justify-items: center;
   h2 {
@@ -155,10 +94,6 @@ figure {
     font-weight: 400;
     font-size: 26px;
     color: $black-color;
-  }
-  hr {
-    width: 80%;
-    margin-bottom: 40px;
   }
 }
 
@@ -187,10 +122,96 @@ figure {
   }
 }
 
+#modal1 {
+  .container-modal {
+    display: grid;
+  }
+  hr {
+    width: 80%;
+    margin-bottom: 40px;
+  }
+}
+
+#modal2 {
+  .container-modal {
+    display: flex;
+    flex-direction: column;
+    .header-modal {
+      justify-content: space-between;
+    }
+  }
+}
+
+.form-modal {
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  max-width: 420px;
+  div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 150px;
+    background: #e8f1f7;
+    justify-content: center;
+    margin: 20px 0;
+    i {
+      font-size: 46px;
+      color: #b9c5cc;
+      margin-bottom: 10px;
+    }
+    p {
+      font-family: "Work Sans";
+      font-weight: 400;
+      font-size: 10px;
+      color: $form-text-color;
+    }
+  }
+  label {
+    font-family: "Work Sans";
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    color: $main-text-color;
+    margin-bottom: 10px;
+  }
+  input,
+  select {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: none;
+    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+  }
+  select {
+    border-right: 15px solid transparent;
+  }
+  input[type="file"] {
+    display: none;
+  }
+  button[type="submit"] {
+    margin: 0 auto;
+    width: 235px;
+    text-align: center;
+  }
+  hr {
+    width: 100%;
+    margin: 30px 0;
+  }
+}
+
+.post-img {
+  img {
+    display: none;
+  }
+}
+
 .footer-modal {
   display: flex;
   flex-direction: column;
   align-items: center;
+  a {
+    width: 235px;
+  }
   p {
     margin-top: 25px;
     font-family: "Syne";

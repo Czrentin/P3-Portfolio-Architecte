@@ -1,14 +1,22 @@
 body {
-  background-color: $bg-color;
-  max-width: 1140px;
-  margin: auto;
+  background-color: $background-color;
   font-family: "Work Sans";
 }
 
 header {
+  max-width: 1140px;
+  margin: 40px auto;
   display: flex;
   justify-content: space-between;
-  margin: 50px 0;
+}
+
+main {
+  max-width: 1140px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 65px;
 }
 
 h1 {
@@ -26,21 +34,28 @@ h1 {
   }
 }
 
-nav ul {
+nav {
   display: flex;
-  align-items: center;
-  list-style-type: none;
-  li {
-    padding: 0 10px;
-    font-size: 1.2em;
-    &:hover {
-      color: $orange-color;
-    }
-    a {
-      color: $black-color;
-      text-decoration: none;
+  ul {
+    display: flex;
+    align-items: center;
+    list-style-type: none;
+    gap: 40px;
+    li {
+      font-size: 1.2em;
       &:hover {
         color: $orange-color;
+      }
+      img {
+        height: 1.2em;
+        vertical-align: bottom;
+      }
+      a {
+        color: $black-color;
+        text-decoration: none;
+        &:hover {
+          color: $orange-color;
+        }
       }
     }
   }
@@ -53,16 +68,19 @@ h2 {
   color: $green-color;
 }
 
-section {
-  margin: 50px 0;
-}
-
 footer {
   background-color: $white-color;
+  max-width: 1140px;
+  margin: 50px auto 0 auto;
 }
 
-footer nav ul {
+footer nav {
   display: flex;
   justify-content: flex-end;
   padding: 2em;
+}
+
+button[type="submit"] {
+  align-self: center;
+  width: 180px;
 }
