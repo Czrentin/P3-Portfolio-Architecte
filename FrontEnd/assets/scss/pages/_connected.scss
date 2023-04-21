@@ -142,11 +142,18 @@
   }
 }
 
+#img-preview {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}
+
 .form-modal {
   display: flex;
   flex-direction: column;
   width: 70%;
   max-width: 420px;
+  margin-top: 10px;
   div {
     display: flex;
     flex-direction: column;
@@ -155,6 +162,10 @@
     background: #e8f1f7;
     justify-content: center;
     margin: 20px 0;
+    img {
+      width: 100%;
+      display: none;
+    }
     i {
       font-size: 46px;
       color: #b9c5cc;
@@ -192,6 +203,9 @@
     margin: 0 auto;
     width: 235px;
     text-align: center;
+    :invalid {
+      background-color: grey;
+    }
   }
   hr {
     width: 100%;

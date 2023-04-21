@@ -106,8 +106,8 @@
 
           <h2 class="titlemodal">Ajout photo</h2>
           <form class="form-modal">
-            <div class="post-img">
-              <img id="img-preview" src="#" alt="L'image à poster" />
+            <div class="preview">
+              <img src="" alt="Votre image à poster" id="img-preview" />
               <i class="fa-sharp fa-regular fa-image"></i>
               <label for="image_uploads" class="btn-blue">
                 + Ajouter photo
@@ -115,8 +115,7 @@
                   type="file"
                   id="image_uploads"
                   name="image_uploads"
-                  accept=".jpg, .jpeg, .png"
-                  class="btn-blue"
+                  onchange="showPreview(event)"
                   required
                 />
               </label>

@@ -274,15 +274,20 @@ document.addEventListener('DOMContentLoaded', function () {
     })
 })
 
-
-// function readURL(input) {
-//     if (input.files && input.files[0]) {
-//         let reader = new FileReader()
-//         const imgPreview = document.getElementById("img-preview")
-
-//         reader.onload = function (e) {
-//             imgPreview.src = e.target.result
-//         }
-//         reader.readAsDataURL(input.files[0])
-//     }
-// }
+function showPreview(event) {
+    if (event.target.files.length > 0) {
+        let src = URL.createObjectURL(event.target.files[0])
+        const preview = document.getElementById('img-preview')
+        preview.src = src
+        preview.style.display = 'flex'
+        preview.addEventListener('click', function () {
+            document.getElementById('image_uploads').click()
+        })
+        const label = document.querySelector('label[for="image_uploads"]')
+        label.style.display = 'none'
+        const p = document.querySelector('.preview p')
+        p.style.display = 'none'
+        const i = document.querySelector('.preview i')
+        i.style.display = 'none'
+    }
+}
