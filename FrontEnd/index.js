@@ -212,36 +212,48 @@ window.addEventListener('keydown', function (e) {
     }
 })
 
-function ajoutProject() {
-    const formulaireAjout = document.getElementsByClassName("form-modal")
-    formulaireAjout.addEventListener("submit", function (event) {
-        event.preventDefault()
-        // Création de l’objet du nouveau projet.
-        const newProject = {
-            image: event.target.querySelector("[name=image_uploads]").files,
-            title: event.target.querySelector("[name=title]").value,
-            category: event.target.querySelector("[name=category]").value,
-        }
+// const formAjout = document.querySelector('.form-modal')
+// formAjout.addEventListener('submit', function (e) {
+//     e.preventDefault()
+//     const newProject = {
+//         image: e.target.querySelector("[name=image_uploads]").files,
+//         title: e.target.querySelector("[name=title]").value,
+//         category: e.target.querySelector("[name=category]").value,
+//     }
+//     console.log(newProject)
+// })
 
-        // Obtenir le token de la session storage
-        const token = JSON.parse(sessionStorage.getItem('token'))
 
-        // Création de la charge utile au format JSON
-        const chargeUtile = JSON.stringify(newProject)
-        // Appel de la fonction fetch avec toutes les informations nécessaires
-        fetch("http://localhost:5678/api/works", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'multipart/form-data',
-                'Authorization': 'Bearer ' + token,
-            },
-            body: chargeUtile
-        }).then(res => res.json())
-            .then(chargeUtile => console.log(chargeUtile))
-            .catch(error => console.error("Une erreur est survenue lors de l'envoie des données du projets :", error))
+const formulaireAjout = document.querySelector('.form-modal')
+formulaireAjout.addEventListener("submit", function (event) {
+    event.preventDefault()
+    // Création de l’objet du nouveau projet.
+    const newProject = {
+        image: event.target.querySelector("[name=image_uploads]").value,
+        title: event.target.querySelector("[name=title]").value,
+        category: event.target.querySelector("[name=category]").value,
+    }
+    // Obtenir le token de la session storage
+    const token = JSON.parse(sessionStorage.getItem('token'))
+
+    // Création de la charge utile au format JSON
+    const chargeUtile = JSON.stringify(newProject)
+    console.log(chargeUtile)
+    // Appel de la fonction fetch avec toutes les informations nécessaires
+    fetch("http://localhost:5678/api/works", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + token,
+        },
+        body: chargeUtile
     })
-}
+        .then(res => console.log(res))
+        .catch(error => console.error(error))
+})
 
+
+// Suppression du projet quand on appui sur l'icone de l'image correspondante
 document.addEventListener('DOMContentLoaded', function () {
     const galleryModal = document.querySelector('.gallery-modal');
 
@@ -263,14 +275,14 @@ document.addEventListener('DOMContentLoaded', function () {
 })
 
 
-function readURL(input) {
-    if (input.files && input.files[0]) {
-        let reader = new FileReader()
-        const imgPreview = document.getElementById("img-preview")
+// function readURL(input) {
+//     if (input.files && input.files[0]) {
+//         let reader = new FileReader()
+//         const imgPreview = document.getElementById("img-preview")
 
-        reader.onload = function (e) {
-            imgPreview.src = e.target.result
-        }
-        reader.readAsDataURL(input.files[0])
-    }
-}
+//         reader.onload = function (e) {
+//             imgPreview.src = e.target.result
+//         }
+//         reader.readAsDataURL(input.files[0])
+//     }
+// }
