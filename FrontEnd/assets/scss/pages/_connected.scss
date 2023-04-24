@@ -203,9 +203,8 @@
     margin: 0 auto;
     width: 235px;
     text-align: center;
-    :invalid {
-      background-color: grey;
-    }
+    background: #a7a7a7;
+    color: $white-color;
   }
   hr {
     width: 100%;

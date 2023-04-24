@@ -10,7 +10,7 @@ async function chargerAPI() {
         window.localStorage.setItem("projets", valeurProjets)
         // Appeler la fonction pour générer les projets avec les données récupérées
         genererProjets(projets)
-        genererGallery(projets)
+        genererGalleryModaleSuppression(projets)
     } catch (error) {
         console.error("Une erreur est survenue lors de la récupération des données des projets :", error)
     }
@@ -36,7 +36,7 @@ function genererProjets(projets) {
     }
 }
 
-function genererGallery(projets) {
+function genererGalleryModaleSuppression(projets) {
     for (let i = 0; i < projets.length; i++) {
 
         // Récupération de l'élément du DOM qui accueillera les projets
@@ -212,68 +212,25 @@ window.addEventListener('keydown', function (e) {
     }
 })
 
-// const formAjout = document.querySelector('.form-modal')
-// formAjout.addEventListener('submit', function (e) {
-//     e.preventDefault()
-//     const newProject = {
-//         image: e.target.querySelector("[name=image_uploads]").files,
-//         title: e.target.querySelector("[name=title]").value,
-//         category: e.target.querySelector("[name=category]").value,
-//     }
-//     console.log(newProject)
-// })
-
-
+// Changement couleur bouton submit modale
 const formulaireAjout = document.querySelector('.form-modal')
-formulaireAjout.addEventListener("submit", function (event) {
-    event.preventDefault()
-    // Création de l’objet du nouveau projet.
-    const newProject = {
-        image: event.target.querySelector("[name=image_uploads]").value,
-        title: event.target.querySelector("[name=title]").value,
-        category: event.target.querySelector("[name=category]").value,
+const submitBtn = formulaireAjout.querySelector('button')
+
+formulaireAjout.addEventListener('input', () => {
+    const image = document.querySelector('#image_uploads').value
+    const title = document.querySelector('#title').value
+    const category = document.querySelector('#category').value
+
+    if (image !== '' && title !== '' && category !== '') {
+        submitBtn.style.backgroundColor = '#1d6154'
+        submitBtn.removeAttribute('disabled')
+    } else {
+        submitBtn.setAttribute('disabled', '')
+        submitBtn.style.backgroundColor = '#a7a7a7'
     }
-    // Obtenir le token de la session storage
-    const token = JSON.parse(sessionStorage.getItem('token'))
-
-    // Création de la charge utile au format JSON
-    const chargeUtile = JSON.stringify(newProject)
-    console.log(chargeUtile)
-    // Appel de la fonction fetch avec toutes les informations nécessaires
-    fetch("http://localhost:5678/api/works", {
-        method: "POST",
-        headers: {
-            'Content-Type': 'multipart/form-data',
-            'Authorization': 'Bearer ' + token,
-        },
-        body: chargeUtile
-    })
-        .then(res => console.log(res))
-        .catch(error => console.error(error))
 })
 
-
-// Suppression du projet quand on appui sur l'icone de l'image correspondante
-document.addEventListener('DOMContentLoaded', function () {
-    const galleryModal = document.querySelector('.gallery-modal');
-
-    galleryModal.addEventListener('click', function (event) {
-        if (event.target.classList.contains('fa-trash-can')) {
-            const id = event.target.parentNode.dataset.id
-            const token = JSON.parse(sessionStorage.getItem('token'))
-            fetch(`http://localhost:5678/api/works/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': 'Bearer ' + token,
-                },
-            })
-                .catch(error => {
-                    console.error('Error:', error)
-                })
-        }
-    })
-})
-
+// Affichage de la photo en preview dans le formulaire
 function showPreview(event) {
     if (event.target.files.length > 0) {
         let src = URL.createObjectURL(event.target.files[0])
@@ -291,3 +248,53 @@ function showPreview(event) {
         i.style.display = 'none'
     }
 }
+
+formulaireAjout.addEventListener("submit", function (event) {
+    event.preventDefault()
+    // Création de l’objet du nouveau projet.
+    const newProject = {
+        image: event.target.querySelector("[name=image_uploads]").value,
+        title: event.target.querySelector("[name=title]").value,
+        category: parseInt(event.target.querySelector("[name=category]").value),
+    }
+    // Création de la charge utile au format JSON
+    const chargeUtile = JSON.stringify(newProject)
+    console.log(chargeUtile)
+
+    // Obtenir le token de la session storage
+    const token = JSON.parse(sessionStorage.getItem('token'))
+
+    // Appel de la fonction fetch avec toutes les informations nécessaires
+    fetch("http://localhost:5678/api/works", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + token,
+        },
+        body: chargeUtile
+    })
+        .then(res => console.log(res))
+        .catch(error => console.error(error))
+})
+
+// Suppression du projet quand on appui sur l'icone de l'image correspondante
+document.addEventListener('DOMContentLoaded', function () {
+    const galleryModal = document.querySelector('.gallery-modal')
+
+    galleryModal.addEventListener('click', function (event) {
+        if (event.target.classList.contains('fa-trash-can')) {
+            const id = event.target.parentNode.dataset.id
+            const token = JSON.parse(sessionStorage.getItem('token'))
+            fetch(`http://localhost:5678/api/works/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                },
+            })
+                .catch(error => {
+                    console.error('Error:', error)
+                })
+        }
+        genererGalleryModaleSuppression(projets)
+    })
+})
