@@ -64,40 +64,79 @@ chargerAPI()
 //
 // Partie pour le filtre
 //
-const filtres = document.querySelector('.filtre')
-const buttonsFiltres = filtres.querySelectorAll('button')
 
-// Fonction qui tri en fonction du data-category 
-buttonsFiltres.forEach(function (buttonsFiltres) {
-    buttonsFiltres.addEventListener("click", function () {
-        const categoryId = parseInt(buttonsFiltres.dataset.category)
-        let projetsFiltres
-        if (categoryId === 0) {
-            projetsFiltres = projets
-        } else {
-            projetsFiltres = projets.filter(function (projet) {
-                return projet.categoryId === categoryId
+// Récupération de la liste des catégories depuis l'API
+async function genererFiltre() {
+    await fetch('http://localhost:5678/api/categories')
+        .then(response => response.json())
+        .then(categories => {
+            // Récupération de la nav et création du ul
+            const nav = document.querySelector('.filtre')
+            const ul = document.createElement('ul')
+
+            // Création du bouton "Tous"
+            const btnTous = document.createElement('button')
+            btnTous.classList.add('btn', 'btn-transparent', 'btn-green')
+            btnTous.dataset.category = 0
+            btnTous.textContent = 'Tous'
+            const liTous = document.createElement('li')
+            liTous.appendChild(btnTous)
+            ul.appendChild(liTous)
+
+            // Création d'un bouton pour chaque catégorie
+            categories.forEach(category => {
+                const btnCategory = document.createElement('button')
+                btnCategory.classList.add('btn', 'btn-transparent')
+                btnCategory.dataset.category = category.id
+                btnCategory.textContent = category.name
+                const liCategory = document.createElement('li')
+                liCategory.appendChild(btnCategory)
+                ul.appendChild(liCategory)
             })
-        }
-        document.querySelector(".gallery").innerHTML = ""
-        genererProjets(projetsFiltres)
-    })
-})
 
-// Permet d'afficher le bouton du filtre sélectionné en "actif" en changeant sa couleur etc
-for (let i = 0; i < buttonsFiltres.length; i++) {
-    buttonsFiltres[i].addEventListener("click", function () {
-        const filtreContainer = document.querySelector('.filtre')
-        let green = filtreContainer.getElementsByClassName('btn-green')
+            // Ajout du filtre à la page
+            nav.appendChild(ul)
+        })
+        .catch(error => {
+            console.error('Erreur lors de la récupération des catégories', error)
+        })
+    const nav = document.querySelector('.filtre')
+    const buttonsFiltres = nav.querySelectorAll('button')
 
-        // si pas de class btn-green
-        if (green.length > 0) {
-            green[0].className = green[0].className.replace(" btn-green", "")
-        }
-        // Ajoute la class btn-green au btn cliqué
-        this.className += " btn-green"
+    // Fonction qui tri en fonction du data-category 
+    buttonsFiltres.forEach(function (buttonsFiltres) {
+        buttonsFiltres.addEventListener("click", function () {
+            const categoryId = parseInt(buttonsFiltres.dataset.category)
+            let projetsFiltres
+            if (categoryId === 0) {
+                projetsFiltres = projets
+            } else {
+                projetsFiltres = projets.filter(function (projet) {
+                    return projet.categoryId === categoryId
+                })
+            }
+            document.querySelector(".gallery").innerHTML = ""
+            genererProjets(projetsFiltres)
+        })
     })
+
+    // Permet d'afficher le bouton du filtre sélectionné en "actif" en changeant sa couleur etc
+    for (let i = 0; i < buttonsFiltres.length; i++) {
+        buttonsFiltres[i].addEventListener("click", function () {
+            const filtreContainer = document.querySelector('.filtre')
+            let green = filtreContainer.getElementsByClassName('btn-green')
+
+            // si pas de class btn-green
+            if (green.length > 0) {
+                green[0].className = green[0].className.replace(" btn-green", "")
+            }
+            // Ajoute la class btn-green au btn cliqué
+            this.className += " btn-green"
+        })
+    }
 }
+
+genererFiltre()
 
 //
 // Partie connectée
