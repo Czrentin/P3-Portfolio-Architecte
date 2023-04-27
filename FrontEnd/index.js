@@ -1,8 +1,10 @@
-let projets = window.localStorage.getItem("projets");
+// Projets stockés directement dans le localStorage sont récupérés ici et transformés
+let projets = window.localStorage.getItem("projets")
 projets = JSON.parse(projets)
 
 async function chargerAPI() {
     try {
+        // stocke la réponse de l'API dans des variable et modifie son type
         const reponse = await fetch('http://localhost:5678/api/works')
         const projets = await reponse.json()
         const valeurProjets = JSON.stringify(projets)
@@ -18,7 +20,6 @@ async function chargerAPI() {
 
 function genererProjets(projets) {
     for (let i = 0; i < projets.length; i++) {
-
         // Récupération de l'élément du DOM qui accueillera les projets
         const sectionProjets = document.querySelector(".gallery")
         // Création d’une balise dédiée pour un projet
@@ -38,7 +39,6 @@ function genererProjets(projets) {
 
 function genererGalleryModaleSuppression(projets) {
     for (let i = 0; i < projets.length; i++) {
-
         // Récupération de l'élément du DOM qui accueillera les projets
         const sectionProjets = document.querySelector('.gallery-modal')
         // Création d’une balise dédiée pour un projet
@@ -77,7 +77,7 @@ async function genererFiltre() {
             // Création du bouton "Tous"
             const btnTous = document.createElement('button')
             btnTous.classList.add('btn', 'btn-transparent', 'btn-green')
-            btnTous.dataset.category = 0
+            btnTous.dataset.category = 0 // Catégorie défini à 0 car les catégories id commence à 1 dans l'API
             btnTous.textContent = 'Tous'
             const liTous = document.createElement('li')
             liTous.appendChild(btnTous)
@@ -86,37 +86,40 @@ async function genererFiltre() {
             // Création d'un bouton pour chaque catégorie
             categories.forEach(category => {
                 const btnCategory = document.createElement('button')
-                btnCategory.classList.add('btn', 'btn-transparent')
-                btnCategory.dataset.category = category.id
-                btnCategory.textContent = category.name
+                btnCategory.classList.add('btn', 'btn-transparent') // Ajoute le style
+                btnCategory.dataset.category = category.id // Ajoute sa catégorie id qui permettra de trier
+                btnCategory.textContent = category.name // Ajoute son nom
                 const liCategory = document.createElement('li')
                 liCategory.appendChild(btnCategory)
                 ul.appendChild(liCategory)
             })
-
-            // Ajout du filtre à la page
+            // Ajout du ul à la page pour tout afficher
             nav.appendChild(ul)
         })
         .catch(error => {
             console.error('Erreur lors de la récupération des catégories', error)
         })
+
+    // Fonctionnalité du filtre par catégories    
     const nav = document.querySelector('.filtre')
     const buttonsFiltres = nav.querySelectorAll('button')
 
     // Fonction qui tri en fonction du data-category 
     buttonsFiltres.forEach(function (buttonsFiltres) {
         buttonsFiltres.addEventListener("click", function () {
+            // Récupère la catégorie de chaque bouton à son clic
             const categoryId = parseInt(buttonsFiltres.dataset.category)
             let projetsFiltres
+            // Condition en fonction de la catégorie
             if (categoryId === 0) {
-                projetsFiltres = projets
+                projetsFiltres = projets // 0 = tous les projets donc on affiche la version de base
             } else {
                 projetsFiltres = projets.filter(function (projet) {
-                    return projet.categoryId === categoryId
+                    return projet.categoryId === categoryId // Chaque nombre équivaut à une catégorie donc on filtre en fonction
                 })
             }
-            document.querySelector(".gallery").innerHTML = ""
-            genererProjets(projetsFiltres)
+            document.querySelector(".gallery").innerHTML = "" // "Refresh"
+            genererProjets(projetsFiltres) // On génére en fonction de la condition précédente
         })
     })
 
@@ -125,8 +128,7 @@ async function genererFiltre() {
         buttonsFiltres[i].addEventListener("click", function () {
             const filtreContainer = document.querySelector('.filtre')
             let green = filtreContainer.getElementsByClassName('btn-green')
-
-            // si pas de class btn-green
+            // si déjà class btn-green on le supprime (que ce soit le bouton cliqué ou non)
             if (green.length > 0) {
                 green[0].className = green[0].className.replace(" btn-green", "")
             }
@@ -181,14 +183,14 @@ if (connected) {
     const p = document.createElement('p')
     p.innerText = 'Mode édition'
 
-    const publish = document.createElement('button')
-    publish.classList.add('btn')
-    publish.innerText = 'publier les changements'
+    const btnPublish = document.createElement('button')
+    btnPublish.classList.add('btn')
+    btnPublish.innerText = 'publier les changements'
 
     headerElement.parentNode.insertBefore(barreModifier, headerElement)
     barreModifier.appendChild(i)
     barreModifier.appendChild(p)
-    barreModifier.appendChild(publish)
+    barreModifier.appendChild(btnPublish)
 }
 
 //
@@ -206,14 +208,17 @@ const stopPropagation = function (e) {
 const openModal = function (e) {
     e.preventDefault()
     const target = document.querySelector(e.currentTarget.getAttribute('href'))
+    // Change les propriété si on clique sur un btn qui à un lien vers une modale
     target.style.display = 'flex'
     target.removeAttribute('aria-hidden')
     target.setAttribute('aria-modal', 'true')
     modal = target
     modal.addEventListener('click', closeModal)
+    // Permet d'avoir un click pour sortir de la modale
     modal.querySelectorAll('.close-modal').forEach(a => {
         a.addEventListener('click', closeModal)
     })
+    // Stop la propagation du click qui limite aux éléments qu'on veut
     modal.querySelectorAll('.container-modal').forEach(a => {
         a.addEventListener('click', stopPropagation)
     })
@@ -221,8 +226,9 @@ const openModal = function (e) {
 
 // Fermeture de la modale
 const closeModal = function (e) {
-    if (modal === null) return
+    if (modal === null) return // Permet de ne rien faire si aucune modale n'est ouverte
     e.preventDefault()
+    // Fait l'inverse de la fonction openModal
     modal.style.display = 'none'
     modal.setAttribute('aria-hidden', 'true')
     modal.removeAttribute('aria-modal')
@@ -233,12 +239,14 @@ const closeModal = function (e) {
     modal.querySelectorAll('.container-modal').forEach(a => {
         a.removeEventListener('click', stopPropagation)
     })
+    // Redéfini la modal comme null 
     modal = null
 }
 
-// Ouverture de la modale au click
+// Ouverture de la modale au click sur les boutons avec .open-modal
 document.querySelectorAll('.open-modal').forEach(a => {
     a.addEventListener('click', function (e) {
+        // Avant d'ouvrir une modale on ferme au cas où il y en aurait déjà une d'ouverte (en lien avec la ligne 229)
         closeModal(e)
         openModal(e)
     })
@@ -258,14 +266,16 @@ const formulaireAjout = document.querySelector('.form-modal')
 const submitBtn = formulaireAjout.querySelector('button')
 
 formulaireAjout.addEventListener('input', () => {
+    // récupère tous les éléments du formulaire
     const image = document.querySelector('#image_uploads').value
     const title = document.querySelector('#title').value
     const category = document.querySelector('#category').value
 
+    // Si les 3 éléments sont rempli alors on attribue une couleur différente et on accepte le clic
     if (image !== '' && title !== '' && category !== '') {
         submitBtn.style.backgroundColor = '#1d6154'
         submitBtn.removeAttribute('disabled')
-    } else {
+    } else { // dès l'instant où les conditions ne sont plus remplis on remet comme avant
         submitBtn.setAttribute('disabled', '')
         submitBtn.style.backgroundColor = '#a7a7a7'
     }
@@ -274,15 +284,18 @@ formulaireAjout.addEventListener('input', () => {
 // Affichage de la photo en preview dans le formulaire
 const imagePreview = document.querySelector('#image_uploads')
 
+// En cas de changement dans l'image upload
 imagePreview.addEventListener('change', function (event) {
+    // Si il y a +0 fichier donc 1
     if (event.target.files.length > 0) {
-        let src = URL.createObjectURL(event.target.files[0])
+        let src = URL.createObjectURL(event.target.files[0]) // récupère le fichier
         const preview = document.getElementById('img-preview')
-        preview.src = src
-        preview.style.display = 'flex'
+        preview.src = src // donne l'image à l'élément image vide
+        preview.style.display = 'flex' // affiche l'élémént image mtn rempli
         preview.addEventListener('click', function () {
-            document.getElementById('image_uploads').click()
+            document.getElementById('image_uploads').click() // Permet de cliquer sur l'image comme si c'était le label
         })
+        // cache les éléments qu'on ne veut plus voir
         const label = document.querySelector('label[for="image_uploads"]')
         label.style.display = 'none'
         const p = document.querySelector('.preview p')
@@ -321,9 +334,9 @@ const galleryModal = document.querySelector('.gallery-modal')
 
 galleryModal.addEventListener('click', function (event) {
     if (event.target.classList.contains('fa-trash-can')) {
-        const id = event.target.parentNode.dataset.id
-        const token = JSON.parse(sessionStorage.getItem('token'))
-        fetch(`http://localhost:5678/api/works/${id}`, {
+        const id = event.target.parentNode.dataset.id // au click vise et récupère l'id de l'élément parent de l'icone
+        const token = JSON.parse(sessionStorage.getItem('token')) // récupère le token
+        fetch(`http://localhost:5678/api/works/${id}`, { // id directement dans l'en-tête
             method: 'DELETE',
             headers: {
                 'Authorization': 'Bearer ' + token,

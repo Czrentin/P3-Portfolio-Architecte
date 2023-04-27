@@ -1,3 +1,4 @@
+// Récupère le formumlaire
 const formulaireLogin = document.querySelector("form")
 formulaireLogin.addEventListener("submit", async function (event) {
     event.preventDefault();
@@ -11,7 +12,7 @@ formulaireLogin.addEventListener("submit", async function (event) {
         const response = await fetch("http://localhost:5678/api/users/login", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(user)
+            body: JSON.stringify(user) // Au format JSON lors de l'envoie
         })
         if (response.ok) {
             // La requête a réussi, redirection vers la page d'accueil
