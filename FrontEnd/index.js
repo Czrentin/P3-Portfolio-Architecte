@@ -1,4 +1,4 @@
-// Projets stockés directement dans le localStorage sont récupérés ici et transformés
+// Projets stockés directement dans le localStorage sont récupérés ici et transformés pour être utilisé dans les filtres
 let projets = window.localStorage.getItem("projets")
 projets = JSON.parse(projets)
 
@@ -19,15 +19,17 @@ async function chargerAPI() {
 }
 
 function genererProjets(projets) {
+    // Récupération de l'élément du DOM qui accueillera les projets
+    const sectionProjets = document.querySelector(".gallery")
+    sectionProjets.innerHTML = ''
     for (let i = 0; i < projets.length; i++) {
-        // Récupération de l'élément du DOM qui accueillera les projets
-        const sectionProjets = document.querySelector(".gallery")
         // Création d’une balise dédiée pour un projet
         const projetElement = document.createElement("figure")
         projetElement.dataset.id = projets[i].id
         // Création des balises à l'intérieur
         const imageElement = document.createElement("img")
         imageElement.src = projets[i].imageUrl
+        imageElement.alt = projets[i].title
         const titleElement = document.createElement("figcaption")
         titleElement.innerText = projets[i].title
         // On rattache la balise article a la section Projets
@@ -38,17 +40,36 @@ function genererProjets(projets) {
 }
 
 function genererGalleryModaleSuppression(projets) {
+    // Récupération de l'élément du DOM qui accueillera les projets
+    const sectionProjets = document.querySelector('.gallery-modal')
+    sectionProjets.innerHTML = ''
     for (let i = 0; i < projets.length; i++) {
-        // Récupération de l'élément du DOM qui accueillera les projets
-        const sectionProjets = document.querySelector('.gallery-modal')
         // Création d’une balise dédiée pour un projet
         const projetElement = document.createElement('figure')
         projetElement.dataset.id = projets[i].id
         // Création des balises à l'intérieur
         const imageElement = document.createElement('img')
         imageElement.src = projets[i].imageUrl
+        imageElement.alt = projets[i].title
         const iconElement = document.createElement('i')
         iconElement.classList.add('fa-solid', 'fa-trash-can')
+        iconElement.addEventListener('click', function (event) {
+            const id = event.target.parentNode.dataset.id // au click vise et récupère l'id de l'élément parent de l'icone
+            const token = JSON.parse(sessionStorage.getItem('token')) // récupère le token
+            fetch(`http://localhost:5678/api/works/${id}`, { // id directement dans l'en-tête
+                method: 'DELETE',
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                },
+            })
+                .then(res => {
+                    chargerAPI() // Permet de voir le changement sans recharger la page
+                })
+                .catch(error => {
+                    console.error('Error:', error)
+                })
+
+        })
         const titleElement = document.createElement('figcaption')
         titleElement.innerText = 'éditer'
         // On rattache la balise article a la section Projets
@@ -100,7 +121,7 @@ async function genererFiltre() {
             console.error('Erreur lors de la récupération des catégories', error)
         })
 
-    // Fonctionnalité du filtre par catégories    
+    // Récupère tous les boutons dans le filtre   
     const nav = document.querySelector('.filtre')
     const buttonsFiltres = nav.querySelectorAll('button')
 
@@ -227,7 +248,9 @@ const openModal = function (e) {
 // Fermeture de la modale
 const closeModal = function (e) {
     if (modal === null) return // Permet de ne rien faire si aucune modale n'est ouverte
-    e.preventDefault()
+    if (e) {
+        e.preventDefault()
+    }
     // Fait l'inverse de la fonction openModal
     modal.style.display = 'none'
     modal.setAttribute('aria-hidden', 'true')
@@ -325,25 +348,9 @@ formulaireAjout.addEventListener("submit", function (event) {
         },
         body: data
     })
-        .then(res => console.log(res))
-        .catch(error => console.error(error))
-})
-
-// Suppression du projet quand on appui sur l'icone de l'image correspondante
-const galleryModal = document.querySelector('.gallery-modal')
-
-galleryModal.addEventListener('click', function (event) {
-    if (event.target.classList.contains('fa-trash-can')) {
-        const id = event.target.parentNode.dataset.id // au click vise et récupère l'id de l'élément parent de l'icone
-        const token = JSON.parse(sessionStorage.getItem('token')) // récupère le token
-        fetch(`http://localhost:5678/api/works/${id}`, { // id directement dans l'en-tête
-            method: 'DELETE',
-            headers: {
-                'Authorization': 'Bearer ' + token,
-            },
+        .then(res => {
+            closeModal()
+            chargerAPI()
         })
-            .catch(error => {
-                console.error('Error:', error)
-            })
-    }
+        .catch(error => console.error(error))
 })
