@@ -297,9 +297,7 @@ formulaireAjout.addEventListener('input', () => {
     // Si les 3 éléments sont rempli alors on attribue une couleur différente et on accepte le clic
     if (image !== '' && title !== '' && category !== '') {
         submitBtn.style.backgroundColor = '#1d6154'
-        submitBtn.removeAttribute('disabled')
     } else { // dès l'instant où les conditions ne sont plus remplis on remet comme avant
-        submitBtn.setAttribute('disabled', '')
         submitBtn.style.backgroundColor = '#a7a7a7'
     }
 })
