@@ -6,7 +6,7 @@ formulaireLogin.addEventListener("submit", async function (event) {
     const user = {
         email: event.target.querySelector("[name=email]").value,
         password: event.target.querySelector("[name=password]").value
-    };
+    }
     // Appel de la fonction fetch avec toutes les informations nécessaires
     try {
         const response = await fetch("http://localhost:5678/api/users/login", {

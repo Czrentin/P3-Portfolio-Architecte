@@ -5,9 +5,10 @@ async function chargerAPI() {
         // stocke la réponse de l'API dans des variable et modifie son type
         const reponse = await fetch('http://localhost:5678/api/works')
         const projetsReponse = await reponse.json()
+        // Stocke dans projets pour y avoir accès même en dehors de la fonction
         projets = projetsReponse
 
-        // Appeler la fonction pour générer les projets avec les données récupérées
+        // Appelle la fonction pour générer les projets avec les données récupérées
         genererProjets(projets)
         genererGalleryModaleSuppression(projets)
     } catch (error) {
@@ -37,28 +38,24 @@ function genererProjets(projets) {
 }
 
 function genererGalleryModaleSuppression(projets) {
-    // Récupération de l'élément du DOM qui accueillera les projets
+    // Récupération de l'élément du DOM qui accueillera les projets et raffraichissement automatique pour éviter les doublons
     const sectionProjets = document.querySelector('.gallery-modal')
     sectionProjets.innerHTML = ''
-
-    const projetIDs = []
 
     for (let i = 0; i < projets.length; i++) {
         // Création d’une balise dédiée pour un projet
         const projetElement = document.createElement('figure')
         projetElement.dataset.id = projets[i].id
 
-        const id = projets[i].id // Récupération de l'ID du projet
-        projetIDs.push(id)
-
-        // Création des balises à l'intérieur
+        // Création des balises à l'intérieur et de leurs attributs
         const imageElement = document.createElement('img')
         imageElement.src = projets[i].imageUrl
         imageElement.alt = projets[i].title
         const iconElement = document.createElement('i')
         iconElement.classList.add('fa-solid', 'fa-trash-can')
+        // Suppresion au clique sur l'icone trash-can du projet grace à la récupération de l'id parent
         iconElement.addEventListener('click', function (event) {
-            const id = event.target.parentNode.dataset.id // au click vise et récupère l'id de l'élément parent de l'icone
+            const id = event.target.parentNode.dataset.id // récupère l'id de l'élément parent de l'icone qu'on clique
             const token = JSON.parse(sessionStorage.getItem('token')) // récupère le token
             fetch(`http://localhost:5678/api/works/${id}`, { // id directement dans l'en-tête
                 method: 'DELETE',
@@ -77,45 +74,19 @@ function genererGalleryModaleSuppression(projets) {
         const titleElement = document.createElement('figcaption')
         titleElement.innerText = 'éditer'
 
-        // On rattache la balise article a la section Projets
+        // On rattache les balises au DOM pour les afficher
         projetElement.appendChild(imageElement)
         projetElement.appendChild(iconElement)
         projetElement.appendChild(titleElement)
         sectionProjets.appendChild(projetElement)
     }
-
-    // console.log(projetIDs)
-
-    // // Bouton pour supprimer tous les projets 
-    // const boutonSuppGallery = document.querySelector('.suppression-galerie')
-    // boutonSuppGallery.addEventListener('click', function (projetIDs) {
-
-
-
-    //     const token = JSON.parse(sessionStorage.getItem('token')) // récupère le token
-    //     fetch(`http://localhost:5678/api/works/${projetIDs}`, { // ids directement dans l'en-tête
-    //         method: 'DELETE',
-    //         headers: {
-    //             'Authorization': 'Bearer ' + token,
-    //         },
-    //     })
-    //         .then(res => {
-    //             chargerAPI() // Permet de voir le changement sans recharger la page
-    //         })
-    //         .catch(error => {
-    //             console.error('Error:', error)
-    //         })
-    // })
 }
 
 chargerAPI()
 
-//
-// Partie pour le filtre
-//
-
-// Récupération de la liste des catégories depuis l'API
+// Fonction regroupant toute la génération des filtres
 async function genererFiltre() {
+    // Récupération de la liste des catégories depuis l'API
     await fetch('http://localhost:5678/api/categories')
         .then(response => response.json())
         .then(categories => {
@@ -149,7 +120,7 @@ async function genererFiltre() {
             console.error('Erreur lors de la récupération des catégories', error)
         })
 
-    // Récupère tous les boutons dans le filtre   
+    // Récupère tous les boutons dans le filtre 
     const nav = document.querySelector('.filtre')
     const buttonsFiltres = nav.querySelectorAll('button')
 
@@ -172,7 +143,7 @@ async function genererFiltre() {
         })
     })
 
-    // Permet d'afficher le bouton du filtre sélectionné en "actif" en changeant sa couleur etc
+    // Permet d'afficher le bouton du filtre sélectionné en "actif"
     for (let i = 0; i < buttonsFiltres.length; i++) {
         buttonsFiltres[i].addEventListener("click", function () {
             const filtreContainer = document.querySelector('.filtre')
@@ -181,17 +152,13 @@ async function genererFiltre() {
             if (green.length > 0) {
                 green[0].className = green[0].className.replace(" btn-green", "")
             }
-            // Ajoute la class btn-green au btn cliqué
+            // Ajoute la class btn-green au btn cliqué qui donne le style voulu
             this.className += " btn-green"
         })
     }
 }
 
 genererFiltre()
-
-//
-// Partie connectée
-//
 
 // vérifie si la paire clé-valeur dans le sessionStorage
 let connected = sessionStorage.getItem("token") !== null
@@ -223,7 +190,6 @@ if (connected) {
 
     // Ajout barre mode édition
     const headerElement = document.querySelector('header')
-
     const barreModifier = document.createElement('div')
     barreModifier.classList.add('barre-modifier')
     const i = document.createElement('i')
@@ -242,10 +208,7 @@ if (connected) {
     barreModifier.appendChild(btnPublish)
 }
 
-//
-// Partie pour la gestion de la modale
-//
-
+// Gestion de la modale
 let modal = null
 
 // Bloquer le clic pour fermer la modale uniquement dedans
@@ -277,7 +240,7 @@ const openModal = (e) => {
 const closeModal = (e) => {
     if (modal === null) return // Permet de ne rien faire si aucune modale n'est ouverte
     if (e) {
-        e.preventDefault()
+        e.preventDefault() // Bloque un soucis de rechargement de page
     }
     // Fait l'inverse de la fonction openModal
     modal.style.display = 'none'
@@ -292,6 +255,7 @@ const closeModal = (e) => {
     })
     // Redéfini la modal comme null 
     modal = null
+    // Supprime ce qu'il y a dans le formulaire et remet tout de base
     formulaireAjout.reset()
     preview.style.display = 'none'
     label.style.display = 'inline'
@@ -302,7 +266,7 @@ const closeModal = (e) => {
 // Ouverture de la modale au click sur les boutons avec .open-modal
 document.querySelectorAll('.open-modal').forEach(a => {
     a.addEventListener('click', (e) => {
-        // Avant d'ouvrir une modale on ferme au cas où il y en aurait déjà une d'ouverte (en lien avec la ligne 229)
+        // Avant d'ouvrir une modale on ferme au cas où il y en aurait déjà une d'ouverte
         closeModal(e)
         openModal(e)
     })
@@ -317,6 +281,7 @@ window.addEventListener('keydown', (e) => {
 
 // Récupération du formulaire d'ajout
 const formulaireAjout = document.querySelector('.form-modal')
+
 // Changement couleur bouton submit modale
 formulaireAjout.addEventListener('input', () => {
     const submitBtn = formulaireAjout.querySelector('button')
@@ -345,14 +310,14 @@ imagePreview.addEventListener('change', (event) => {
     preview.style.display = 'flex' // affiche l'élémént image mtn rempli
 
     // cache les éléments qu'on ne veut plus voir
-
     label.style.display = 'none'
     p.style.display = 'none'
     i.style.display = 'none'
 })
 
+// Permet de cliquer sur l'image comme si c'était le label
 preview.addEventListener('click', () => {
-    document.getElementById('image_uploads').click() // Permet de cliquer sur l'image comme si c'était le label
+    document.getElementById('image_uploads').click()
 })
 
 // Ajout d'un projet via formulaire modal2
