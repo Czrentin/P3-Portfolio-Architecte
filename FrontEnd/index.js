@@ -1,15 +1,12 @@
-// Projets stockés directement dans le localStorage sont récupérés ici et transformés pour être utilisé dans les filtres
-let projets = window.localStorage.getItem("projets")
-projets = JSON.parse(projets)
+let projets = []
 
 async function chargerAPI() {
     try {
         // stocke la réponse de l'API dans des variable et modifie son type
         const reponse = await fetch('http://localhost:5678/api/works')
-        const projets = await reponse.json()
-        const valeurProjets = JSON.stringify(projets)
-        // Stockage des informations dans le localStorage
-        window.localStorage.setItem("projets", valeurProjets)
+        const projetsReponse = await reponse.json()
+        projets = projetsReponse
+
         // Appeler la fonction pour générer les projets avec les données récupérées
         genererProjets(projets)
         genererGalleryModaleSuppression(projets)
@@ -43,10 +40,17 @@ function genererGalleryModaleSuppression(projets) {
     // Récupération de l'élément du DOM qui accueillera les projets
     const sectionProjets = document.querySelector('.gallery-modal')
     sectionProjets.innerHTML = ''
+
+    const projetIDs = []
+
     for (let i = 0; i < projets.length; i++) {
         // Création d’une balise dédiée pour un projet
         const projetElement = document.createElement('figure')
         projetElement.dataset.id = projets[i].id
+
+        const id = projets[i].id // Récupération de l'ID du projet
+        projetIDs.push(id)
+
         // Création des balises à l'intérieur
         const imageElement = document.createElement('img')
         imageElement.src = projets[i].imageUrl
@@ -72,12 +76,36 @@ function genererGalleryModaleSuppression(projets) {
         })
         const titleElement = document.createElement('figcaption')
         titleElement.innerText = 'éditer'
+
         // On rattache la balise article a la section Projets
         projetElement.appendChild(imageElement)
         projetElement.appendChild(iconElement)
         projetElement.appendChild(titleElement)
         sectionProjets.appendChild(projetElement)
     }
+
+    // console.log(projetIDs)
+
+    // // Bouton pour supprimer tous les projets 
+    // const boutonSuppGallery = document.querySelector('.suppression-galerie')
+    // boutonSuppGallery.addEventListener('click', function (projetIDs) {
+
+
+
+    //     const token = JSON.parse(sessionStorage.getItem('token')) // récupère le token
+    //     fetch(`http://localhost:5678/api/works/${projetIDs}`, { // ids directement dans l'en-tête
+    //         method: 'DELETE',
+    //         headers: {
+    //             'Authorization': 'Bearer ' + token,
+    //         },
+    //     })
+    //         .then(res => {
+    //             chargerAPI() // Permet de voir le changement sans recharger la page
+    //         })
+    //         .catch(error => {
+    //             console.error('Error:', error)
+    //         })
+    // })
 }
 
 chargerAPI()
@@ -178,7 +206,7 @@ if (connected) {
     a.setAttribute("href", "./index.html");
     a.innerText = 'logout'
     // Supprime le token quand in appui sur logout
-    a.addEventListener("click", function () {
+    a.addEventListener("click", () => {
         window.sessionStorage.removeItem("token");
     })
 
@@ -221,12 +249,12 @@ if (connected) {
 let modal = null
 
 // Bloquer le clic pour fermer la modale uniquement dedans
-const stopPropagation = function (e) {
+const stopPropagation = (e) => {
     e.stopPropagation()
 }
 
 // Ouverture de la modale
-const openModal = function (e) {
+const openModal = (e) => {
     e.preventDefault()
     const target = document.querySelector(e.currentTarget.getAttribute('href'))
     // Change les propriété si on clique sur un btn qui à un lien vers une modale
@@ -246,7 +274,7 @@ const openModal = function (e) {
 }
 
 // Fermeture de la modale
-const closeModal = function (e) {
+const closeModal = (e) => {
     if (modal === null) return // Permet de ne rien faire si aucune modale n'est ouverte
     if (e) {
         e.preventDefault()
@@ -264,11 +292,16 @@ const closeModal = function (e) {
     })
     // Redéfini la modal comme null 
     modal = null
+    formulaireAjout.reset()
+    preview.style.display = 'none'
+    label.style.display = 'inline'
+    p.style.display = 'block'
+    i.style.display = 'inline'
 }
 
 // Ouverture de la modale au click sur les boutons avec .open-modal
 document.querySelectorAll('.open-modal').forEach(a => {
-    a.addEventListener('click', function (e) {
+    a.addEventListener('click', (e) => {
         // Avant d'ouvrir une modale on ferme au cas où il y en aurait déjà une d'ouverte (en lien avec la ligne 229)
         closeModal(e)
         openModal(e)
@@ -276,7 +309,7 @@ document.querySelectorAll('.open-modal').forEach(a => {
 })
 
 // Fermeture de la modale avec le clavier
-window.addEventListener('keydown', function (e) {
+window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' || e.key === 'Esc') {
         closeModal(e)
     }
@@ -284,16 +317,13 @@ window.addEventListener('keydown', function (e) {
 
 // Récupération du formulaire d'ajout
 const formulaireAjout = document.querySelector('.form-modal')
-
 // Changement couleur bouton submit modale
-const submitBtn = formulaireAjout.querySelector('button')
-
 formulaireAjout.addEventListener('input', () => {
+    const submitBtn = formulaireAjout.querySelector('button')
     // récupère tous les éléments du formulaire
     const image = document.querySelector('#image_uploads').value
     const title = document.querySelector('#title').value
     const category = document.querySelector('#category').value
-
     // Si les 3 éléments sont rempli alors on attribue une couleur différente et on accepte le clic
     if (image !== '' && title !== '' && category !== '') {
         submitBtn.style.backgroundColor = '#1d6154'
@@ -304,30 +334,29 @@ formulaireAjout.addEventListener('input', () => {
 
 // Affichage de la photo en preview dans le formulaire
 const imagePreview = document.querySelector('#image_uploads')
-
+const preview = document.getElementById('img-preview')
+const label = document.querySelector('label[for="image_uploads"]')
+const p = document.querySelector('.preview p')
+const i = document.querySelector('.preview i')
 // En cas de changement dans l'image upload
-imagePreview.addEventListener('change', function (event) {
-    // Si il y a +0 fichier donc 1
-    if (event.target.files.length > 0) {
-        let src = URL.createObjectURL(event.target.files[0]) // récupère le fichier
-        const preview = document.getElementById('img-preview')
-        preview.src = src // donne l'image à l'élément image vide
-        preview.style.display = 'flex' // affiche l'élémént image mtn rempli
-        preview.addEventListener('click', function () {
-            document.getElementById('image_uploads').click() // Permet de cliquer sur l'image comme si c'était le label
-        })
-        // cache les éléments qu'on ne veut plus voir
-        const label = document.querySelector('label[for="image_uploads"]')
-        label.style.display = 'none'
-        const p = document.querySelector('.preview p')
-        p.style.display = 'none'
-        const i = document.querySelector('.preview i')
-        i.style.display = 'none'
-    }
+imagePreview.addEventListener('change', (event) => {
+    let src = URL.createObjectURL(event.target.files[0]) // récupère le fichier
+    preview.src = src // donne l'image à l'élément image vide
+    preview.style.display = 'flex' // affiche l'élémént image mtn rempli
+
+    // cache les éléments qu'on ne veut plus voir
+
+    label.style.display = 'none'
+    p.style.display = 'none'
+    i.style.display = 'none'
+})
+
+preview.addEventListener('click', () => {
+    document.getElementById('image_uploads').click() // Permet de cliquer sur l'image comme si c'était le label
 })
 
 // Ajout d'un projet via formulaire modal2
-formulaireAjout.addEventListener("submit", function (event) {
+formulaireAjout.addEventListener("submit", (event) => {
     event.preventDefault()
     // Récupération données du formulaire avec FormData()
     let data = new FormData()

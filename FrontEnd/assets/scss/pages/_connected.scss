@@ -81,7 +81,7 @@
 .container-modal {
   background-color: $white-color;
   width: 50%;
-  height: 85%;
+  height: 90%;
   max-width: calc(100vw - 30px);
   max-height: calc(100vh - 30px);
   padding: 30px;
@@ -226,11 +226,14 @@
   a {
     width: 235px;
   }
-  p {
+  .suppression-galerie {
     margin-top: 25px;
     font-family: "Syne";
     color: #d65353;
     font-size: 14px;
     font-weight: 400;
+    background: none;
+    border: none;
+    cursor: pointer;
   }
 }
